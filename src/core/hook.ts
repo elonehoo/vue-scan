@@ -1,6 +1,6 @@
 import type { VueAppInstance } from '@vue/devtools-kit'
 import { getInstanceName } from '../shared/vue'
-import { clearhighlight, createUpdateHighlight, highlight, unhighlight } from './highlight'
+import { clearhighlight, createUpdateHighlight, highlight } from './highlight'
 import { updatePanelData } from './panel'
 
 export interface BACE_VUE_INSTANCE extends VueAppInstance {
@@ -134,7 +134,7 @@ export function createOnBeforeUpdateHook(instance?: BACE_VUE_INSTANCE, options?:
     }
 
     instance.__flashTimeout = setTimeout(() => {
-      unhighlight(uuid)
+      clearhighlight(uuid)
       instance.__flashTimeout = null
       instance.__flashCount = 0
     }, interval)

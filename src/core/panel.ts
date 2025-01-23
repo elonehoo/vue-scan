@@ -1,5 +1,4 @@
-import { getComponentBoundingRect } from '../shared/vue'
-import { type ComponentBoundingRect, highlight } from './highlight'
+import { clearhighlight, highlight } from './highlight'
 
 interface PropChange {
   key: string
@@ -143,10 +142,12 @@ class DebugPanel {
       if (componentEl) {
         const uuid = componentEl.getAttribute('data-component-uuid')
         if (uuid) {
+          // 如果点击的是组件头部,则切换展开状态
           if (target.classList.contains('component-header')) {
             this.toggleExpand(uuid)
           }
-          else if (target.classList.contains('locate-button')) {
+          // 如果点击的是整个组件项(不包括展开内容),则触发高亮
+          else if (!target.closest('.component-details')) {
             this.highlightComponent(uuid)
           }
         }
@@ -165,21 +166,28 @@ class DebugPanel {
   }
 
   private highlightComponent(uuid: string) {
-    this.selectedUuid = this.selectedUuid === uuid ? null : uuid
-    const data = this.componentData.get(uuid)
+    // 如果点击当前已选中的项，则取消高亮
+    if (this.selectedUuid === uuid) {
+      this.clearHighlight(uuid)
+      return
+    }
 
+    // 如果之前有选中的项，先清除它的高亮
+    if (this.selectedUuid) {
+      this.clearHighlight(this.selectedUuid)
+    }
+
+    // 高亮新选中的项
+    this.selectedUuid = uuid
+    const data = this.componentData.get(uuid)
     if (!data) 
 return
 
-    // 使用更可靠的选择器组合
-    const targetElement = document.querySelector(`[data-vue-scan-id="${uuid}"], [data-component-id="${uuid}"]`)
+    const targetElement = document.querySelector(`[data-vue-scan-id="${uuid}"]`)
     if (!targetElement) {
       console.warn(`[vue-scan] Cannot find element with id ${uuid}`)
       return
     }
-
-    // 获取真实的组件元素边界
-    const bounds = targetElement.getBoundingClientRect()
 
     // 滚动到视图
     targetElement.scrollIntoView({
@@ -188,21 +196,25 @@ return
     })
 
     // 高亮显示
-    if (this.selectedUuid === uuid) {
-      // 使用canvas高亮和DOM高亮结合
-      highlight(targetElement, uuid, 1, {
-        hideComponentName: false,
-        permanent: true,
-      })
-      this.addHighlight(targetElement, uuid)
-    }
- else {
-      unhighlight(uuid)
-      this.removeHighlight(targetElement, uuid)
-    }
+    highlight(targetElement, uuid, 1, {
+      hideComponentName: false,
+      permanent: true,
+    })
+    this.addHighlight(targetElement, uuid)
 
     // 更新标签位置
     this.updateLabels()
+    this.render()
+  }
+
+  // 新增：清除高亮的辅助方法
+  private clearHighlight(uuid: string) {
+    this.selectedUuid = null
+    const targetElement = document.querySelector(`[data-vue-scan-id="${uuid}"]`)
+    if (targetElement) {
+      this.removeHighlight(targetElement, uuid)
+      clearhighlight(uuid)
+    }
     this.render()
   }
 
@@ -348,21 +360,18 @@ return
             background: rgba(255,255,255,0.1);
             border-radius: 4px;
             ${this.selectedUuid === uuid ? 'border: 1px solid #fff;' : ''}
+            cursor: pointer;
           "
         >
-          <div class="component-header" style="display: flex; justify-content: space-between; cursor: pointer;">
+          <div class="component-header" style="display: flex; justify-content: space-between;">
             <div style="font-weight: bold; margin-bottom: 4px;">
               ${data.componentName}
               <span style="opacity: 0.5; font-size: 0.9em;">(${data.renderCount})</span>
             </div>
-            <button
-              class="locate-button"
-              style="padding: 2px 6px; border-radius: 3px; border: none; background: #666;"
-            >
-              Locate
-            </button>
           </div>
-          ${this.expandedComponents.has(uuid) ? this.renderComponentDetails(data) : ''}
+          ${this.expandedComponents.has(uuid)
+            ? `<div class="component-details">${this.renderComponentDetails(data)}</div>`
+            : ''}
         </div>
       `)
       .join('')

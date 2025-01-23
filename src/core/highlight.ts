@@ -315,10 +315,6 @@ export function highlight(
   }
 }
 
-export function unhighlight(uuid: string) {
-  highlightCanvas?.clear(uuid)
-}
-
 export function clearhighlight(uuid: string) {
   highlightCanvas?.clear(uuid)
 }
