@@ -4,6 +4,8 @@ like [react-scan](https://github.com/aidenybai/react-scan)
 
 > Scan your Vue app for renders
 
+![demo](./public/demo.mp4)
+
 ## Install
 
 ```bash
