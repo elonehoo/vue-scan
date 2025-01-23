@@ -4,7 +4,9 @@ like [react-scan](https://github.com/aidenybai/react-scan)
 
 > Scan your Vue app for renders
 
-![demo](./public/demo.mp4)
+<video width="320" height="240" controls>
+  <source src="./public/demo.mp4" type="video/mp4">
+</video>
 
 ## Install
 
