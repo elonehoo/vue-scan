@@ -60,7 +60,7 @@ importers:
       vue:
         specifier: ^3.5.13
         version: 3.5.13(typescript@5.6.3)
-      vue-scan:
+      vue-plugin-scan:
         specifier: workspace:*
         version: link:..
     devDependencies:
