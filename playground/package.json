@@ -10,7 +10,7 @@
   },
   "dependencies": {
     "vue": "^3.5.13",
-    "vue-scan": "workspace:*"
+    "vue-plugin-scan": "workspace:*"
   },
   "devDependencies": {
     "@vitejs/plugin-vue": "^5.2.1",

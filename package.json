@@ -1,16 +1,16 @@
 {
-  "name": "vue-scan",
+  "name": "vue-plugin-scan",
   "type": "module",
   "version": "0.0.0",
-  "description": "Starter template for TypeScript",
+  "description": "Scan your Vue app for renders",
   "author": "Elone Hoo <hi@elonehoo.me>",
   "license": "MIT",
-  "homepage": "https://github.com/elonehoo-starter/typescript",
+  "homepage": "https://github.com/elonehoo/vue-scan",
   "repository": {
     "type": "git",
-    "url": "https://github.com/elonehoo-starter/typescript"
+    "url": "https://github.com/elonehoo/vue-scan"
   },
-  "bugs": "https://github.com/elonehoo-starter/typescript/issues",
+  "bugs": "https://github.com/elonehoo/vue-scan/issues",
   "keywords": [
     "template",
     "TypeScript"

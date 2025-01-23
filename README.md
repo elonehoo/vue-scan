@@ -1,32 +1,29 @@
-# starter-ts
+# vue-plugin-scan
 
-[![NPM version](https://img.shields.io/npm/v/@elonehoo/starter-ts?color=a1b858&label=)](https://www.npmjs.com/package/@elonehoo/starter-ts)
+like [react-scan](https://github.com/aidenybai/react-scan)
 
-Starter template for TypeScript library.
+> Scan your Vue app for renders
 
-## Try it now!
-
-### GitHub Template
-
-[Create a repo from this template on GitHub](https://github.com/elonehoo-starter/typescript/generate).
-
-### Clone to local
-
-If you prefer to do it manually with the cleaner git history
+## Install
 
 ```bash
-sudo npx degit elonehoo-starter/typescript my-ts-app
-cd my-ts-app
-pnpm i # If you don't have pnpm installed, run: npm install -g pnpm
+npm install vue-plugin-scan
 ```
 
-## Checklist
+## Usage
 
-When you use this template, try follow the checklist to update your info properly
+```ts
+import { createApp } from 'vue'
+import VueScan, { type VueScanOptions } from 'vue-scan'
+import App from './App.vue'
 
-- [ ] Change the author name in `LICENSE`
-- [ ] Change the package name in `package.json` and package info
-- [ ] Remove the `.github` folder which contains the funding info
-- [ ] Clean up the README
+import './style.css'
 
-And, enjoy :)
+const app = createApp(App)
+app.use<VueScanOptions>(VueScan, {})
+app.mount('#app')
+```
+
+## Credits
+
+- [react-scan](https://github.com/aidenybai/react-scan)
