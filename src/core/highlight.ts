@@ -14,274 +14,91 @@ export function isInViewport(bounds: ComponentBoundingRect): boolean {
   const viewportWidth = window.innerWidth
   const viewportHeight = window.innerHeight
 
-  // 只要元素和视口有交集，就认为是在视口内
   return !(
-    bounds.left >= viewportWidth // 完全在视口右侧
-    || bounds.right <= 0 // 完全在视口左侧
-    || bounds.top >= viewportHeight // 完全在视口下方
-    || bounds.bottom <= 0 // 完全在视口上方
+    bounds.left >= viewportWidth
+    || bounds.right <= 0
+    || bounds.top >= viewportHeight
+    || bounds.bottom <= 0
   )
 }
 
-interface HighlightItem {
-  bounds: ComponentBoundingRect
-  name: string
-  flashCount: number
-  hideComponentName: boolean
-  startTime: number
-  lastUpdateTime: number
-  opacity: number
-  state: 'fade-in' | 'visible' | 'fade-out'
-  permanent?: boolean // 添加永久高亮标记
+function createHighlightElement(uuid: string): HTMLElement {
+  const highlightEl = document.createElement('div')
+  highlightEl.id = `vue-scan-highlight-${uuid}`
+  highlightEl.style.cssText = `
+    position: fixed;
+    pointer-events: none;
+    z-index: 9999;
+    border: 2px solid #42b883;
+    transition: all 0.3s ease;
+    opacity: 0;
+  `
+  // 使用 requestAnimationFrame 确保过渡动画生效
+  requestAnimationFrame(() => {
+    highlightEl.style.opacity = '1'
+  })
+  return highlightEl
 }
 
-class HighlightCanvas {
-  private canvas: HTMLCanvasElement
-  private ctx: CanvasRenderingContext2D
-  private readonly DISPLAY_DURATION = 1000
-  private readonly FADE_IN_DURATION = 300
-  private readonly FADE_OUT_DURATION = 300
-  private highlights: Map<string, HighlightItem> = new Map()
-  private animationFrame: number | null = null
-  private textMetricsCache: Map<string, TextMetrics> = new Map()
-
-  constructor() {
-    this.canvas = document.createElement('canvas')
-    this.canvas.style.cssText = `
-      position: fixed;
-      top: 0;
-      left: 0;
-      pointer-events: none;
-      z-index: 9999;
-    `
-    this.ctx = this.canvas.getContext('2d')!
-    document.body.appendChild(this.canvas)
-    this.updateCanvasSize()
-    window.addEventListener('resize', () => this.updateCanvasSize())
-    window.addEventListener('scroll', () => this.scheduleRender())
-  }
-
-  private updateCanvasSize() {
-    this.canvas.width = window.innerWidth
-    this.canvas.height = window.innerHeight
-  }
-
-  drawHighlight(
-    bounds: ComponentBoundingRect,
-    uuid: string,
-    name: string,
-    flashCount: number,
-    hideComponentName = false,
-    permanent = false, // 添加永久高亮选项
-  ) {
-    const now = Date.now()
-    const existingItem = this.highlights.get(uuid)
-
-    if (existingItem) {
-      existingItem.bounds = bounds
-      existingItem.name = name
-      existingItem.flashCount = flashCount
-      existingItem.hideComponentName = hideComponentName
-      existingItem.lastUpdateTime = now
-      existingItem.permanent = permanent // 保存permanent状态
-
-      if (existingItem.state === 'fade-out') {
-        existingItem.state = 'visible'
-        existingItem.opacity = 1
-      }
-    }
-    else {
-      this.highlights.set(uuid, {
-        bounds,
-        name,
-        flashCount,
-        hideComponentName,
-        startTime: now,
-        lastUpdateTime: now,
-        opacity: 0,
-        state: 'fade-in',
-        permanent, // 保存permanent状态
-      })
-    }
-
-    this.scheduleRender()
-  }
-
-  private scheduleRender() {
-    if (this.animationFrame)
-      return
-    this.animationFrame = requestAnimationFrame(() => this.render())
-  }
-
-  private render() {
-    const now = Date.now()
-
-    this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height)
-
-    this.ctx.font = '12px sans-serif'
-    this.ctx.textBaseline = 'middle'
-
-    for (const [uuid, item] of this.highlights.entries()) {
-      if (!isInViewport(item.bounds))
-        continue
-
-      const fadeInElapsed = now - item.startTime
-      const idleTime = now - item.lastUpdateTime
-      const fadeOutElapsed = now - item.startTime
-
-      switch (item.state) {
-        case 'fade-in':
-          item.opacity = Math.min(1, fadeInElapsed / this.FADE_IN_DURATION)
-          if (fadeInElapsed >= this.FADE_IN_DURATION) {
-            item.state = 'visible'
-            item.opacity = 1
-          }
-          break
-
-        case 'visible':
-          // 只有非永久高亮的元素才会自动消失
-          if (!item.permanent && idleTime >= this.DISPLAY_DURATION) {
-            item.state = 'fade-out'
-            item.startTime = now
-          }
-          break
-
-        case 'fade-out':
-          item.opacity = Math.max(0, 1 - (fadeOutElapsed / this.FADE_OUT_DURATION))
-          if (fadeOutElapsed >= this.FADE_OUT_DURATION) {
-            this.highlights.delete(uuid)
-            continue
-          }
-          break
-      }
-
-      this.drawBorder(item)
-      if (!item.hideComponentName) {
-        this.drawLabel(item, item.opacity)
-      }
-    }
-
-    if (this.highlights.size > 0) {
-      this.animationFrame = requestAnimationFrame(() => this.render())
-    }
-    else {
-      this.animationFrame = null
-      this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height)
-    }
-  }
-
-  private drawBorder(item: HighlightItem) {
-    const { bounds, flashCount, opacity } = item
-    this.ctx.strokeStyle = `rgba(${Math.min(255, flashCount * 6)}, ${Math.max(0, 255 - flashCount * 6)}, 0, ${opacity})`
-    this.ctx.lineWidth = 2
-    this.ctx.strokeRect(
-      bounds.left,
-      bounds.top,
-      bounds.width,
-      bounds.height,
-    )
-  }
-
-  private drawLabel(item: HighlightItem, opacity: number) {
-    const { bounds, name, flashCount } = item
-    const labelMetrics = this.getTextMetrics(name)
-    const padding = 6
-    const labelHeight = 20
-
-    // 计算标签位置 - 移除额外的padding，直接贴在边框上
-    let labelX = bounds.left
-    let labelY = bounds.top
-
-    // 确保标签在视口内
-    const viewportHeight = window.innerHeight
-    const labelTotalHeight = labelHeight
-    const viewportWidth = window.innerWidth
-    const labelTotalWidth = labelMetrics.width + padding * 2
-
-    // 如果标签底部超出视口
-    if (labelY + labelTotalHeight > viewportHeight) {
-      labelY = viewportHeight - labelTotalHeight
-    }
-
-    // 如果标签右侧超出视口
-    if (labelX + labelTotalWidth > viewportWidth) {
-      labelX = viewportWidth - labelTotalWidth
-    }
-
-    // 绘制背景
-    this.ctx.fillStyle = `rgba(${Math.min(255, flashCount * 6)}, ${Math.max(0, 255 - flashCount * 6)}, 0, ${opacity * 0.8})`
-    this.ctx.fillRect(labelX, labelY, labelMetrics.width + padding * 2, labelHeight)
-
-    // 绘制文本 - 确保文本在背景中居中
-    this.ctx.fillStyle = Math.min(255, flashCount * 6) > 128
-      ? `rgba(255, 255, 255, ${opacity})`
-      : `rgba(0, 0, 0, ${opacity})`
-    this.ctx.fillText(name, labelX + padding, labelY + labelHeight / 2)
-  }
-
-  private getTextMetrics(text: string): TextMetrics {
-    const cached = this.textMetricsCache.get(text)
-    if (cached)
-      return cached
-
-    const metrics = this.ctx.measureText(text)
-    this.textMetricsCache.set(text, metrics)
-    return metrics
-  }
-
-  clear(uuid: string) {
-    const item = this.highlights.get(uuid)
-    if (item && item.state !== 'fade-out') {
-      item.state = 'fade-out'
-      item.startTime = Date.now()
-      this.scheduleRender()
-    }
-  }
-
-  clearAll() {
-    this.highlights.clear()
-    this.textMetricsCache.clear()
-    if (this.animationFrame) {
-      cancelAnimationFrame(this.animationFrame)
-      this.animationFrame = null
-    }
-    this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height)
-  }
-
-  destroy() {
-    this.clearAll()
-    if (this.canvas && this.canvas.parentNode) {
-      this.canvas.parentNode.removeChild(this.canvas)
-    }
-  }
+function createLabelElement(uuid: string, name: string): HTMLElement {
+  const labelEl = document.createElement('div')
+  labelEl.id = `vue-scan-label-${uuid}`
+  labelEl.style.cssText = `
+    position: fixed;
+    background: #42b883;
+    color: white;
+    padding: 4px 8px;
+    border-radius: 4px;
+    font-size: 12px;
+    pointer-events: none;
+    z-index: 10000;
+    transition: all 0.3s ease;
+    opacity: 0;
+  `
+  labelEl.textContent = name
+  // 使用 requestAnimationFrame 确保过渡动画生效
+  requestAnimationFrame(() => {
+    labelEl.style.opacity = '1'
+  })
+  return labelEl
 }
 
-let highlightCanvas: HighlightCanvas | null = new HighlightCanvas()
+function updateHighlightPosition(highlightEl: HTMLElement, bounds: ComponentBoundingRect) {
+  highlightEl.style.left = `${bounds.left}px`
+  highlightEl.style.top = `${bounds.top}px`
+  highlightEl.style.width = `${bounds.width}px`
+  highlightEl.style.height = `${bounds.height}px`
+}
 
-window.addEventListener('unload', () => {
-  if (highlightCanvas) {
-    highlightCanvas.destroy()
-    highlightCanvas = null
-  }
-})
+function updateLabelPosition(labelEl: HTMLElement, bounds: ComponentBoundingRect) {
+  labelEl.style.left = `${bounds.left}px`
+  labelEl.style.top = `${bounds.top - labelEl.offsetHeight - 4}px`
+}
 
-type UpdateHighlightFn = (
+type UpdateHighlightFunction = (
   bounds: ComponentBoundingRect,
   name: string,
   flashCount: number,
   hideComponentName?: boolean
 ) => void
 
-export function createUpdateHighlight(): UpdateHighlightFn {
-  return throttle<UpdateHighlightFn>(
+export function createUpdateHighlight(): UpdateHighlightFunction {
+  return throttle<UpdateHighlightFunction>(
     (bounds, name, flashCount, hideComponentName) => {
-      if (!isInViewport(bounds) || !highlightCanvas)
+      if (!isInViewport(bounds))
         return
-      highlightCanvas.drawHighlight(bounds, name, name, flashCount, hideComponentName)
+      highlight(bounds, name, flashCount, { hideComponentName })
     },
     500,
+    {} as any,
   )
 }
+
+// 添加一个 Map 来跟踪每个组件的最后渲染时间和timeout
+const componentTimers = new Map<string, {
+  lastRenderTime: number
+  timeout: NodeJS.Timeout | null
+}>()
 
 export function highlight(
   instance: any,
@@ -290,31 +107,73 @@ export function highlight(
   options?: {
     hideComponentName?: boolean
     renderTime?: number
-    permanent?: boolean // 添加永久高亮选项
+    permanent?: boolean
   },
 ) {
   const bounds = getComponentBoundingRect(instance)
-
   if (!bounds.width && !bounds.height)
     return
   if (!isInViewport(bounds))
     return
 
-  // 添加渲染时间到组件名称后
   const renderTimeText = options?.renderTime
     ? ` (${options.renderTime.toFixed(2)}ms)`
     : ''
   const name = `${getInstanceName(instance)} x ${flashCount} ${renderTimeText}`
 
-  if (options?.permanent) {
-    // 永久高亮不会自动消失
-    highlightCanvas?.drawHighlight(bounds, uuid, name, flashCount, options?.hideComponentName, options?.permanent)
+  let highlightEl = document.getElementById(`vue-scan-highlight-${uuid}`) as HTMLElement
+  let labelEl = document.getElementById(`vue-scan-label-${uuid}`) as HTMLElement
+
+  if (!highlightEl) {
+    highlightEl = createHighlightElement(uuid)
+    document.body.appendChild(highlightEl)
   }
-  else {
-    highlightCanvas?.drawHighlight(bounds, uuid, name, flashCount, options?.hideComponentName)
+
+  if (!labelEl && !options?.hideComponentName) {
+    labelEl = createLabelElement(uuid, name)
+    document.body.appendChild(labelEl)
   }
+
+  updateHighlightPosition(highlightEl, bounds)
+  if (labelEl) {
+    labelEl.textContent = name
+    updateLabelPosition(labelEl, bounds)
+  }
+
+  // 更新最后渲染时间
+  const timer = componentTimers.get(uuid) || { lastRenderTime: 0, timeout: null }
+  timer.lastRenderTime = Date.now()
+
+  // 清除之前的timeout
+  if (timer.timeout) {
+    clearTimeout(timer.timeout)
+  }
+
+  if (!options?.permanent) {
+    // 设置新的timeout - 在2秒没有新的渲染后才淡出
+    timer.timeout = setTimeout(() => {
+      const now = Date.now()
+      // 只有在最后一次渲染后2秒内没有新的渲染才清除高亮
+      if (now - timer.lastRenderTime >= 2000) {
+        clearhighlight(uuid)
+        componentTimers.delete(uuid)
+      }
+    }, 2000)
+  }
+
+  componentTimers.set(uuid, timer)
 }
 
 export function clearhighlight(uuid: string) {
-  highlightCanvas?.clear(uuid)
+  const highlightEl = document.getElementById(`vue-scan-highlight-${uuid}`)
+  const labelEl = document.getElementById(`vue-scan-label-${uuid}`)
+
+  if (highlightEl) {
+    highlightEl.style.opacity = '0'
+    setTimeout(() => highlightEl.remove(), 300) // 等待动画完成后移除元素
+  }
+  if (labelEl) {
+    labelEl.style.opacity = '0'
+    setTimeout(() => labelEl.remove(), 300) // 等待动画完成后移除元素
+  }
 }
