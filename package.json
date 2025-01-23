@@ -1,7 +1,7 @@
 {
   "name": "vue-plugin-scan",
   "type": "module",
-  "version": "0.0.0",
+  "version": "0.0.1",
   "description": "Scan your Vue app for renders",
   "author": "Elone Hoo <hi@elonehoo.me>",
   "license": "MIT",
