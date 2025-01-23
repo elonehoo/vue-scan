@@ -14,7 +14,7 @@ npm install vue-plugin-scan
 
 ```ts
 import { createApp } from 'vue'
-import VueScan, { type VueScanOptions } from 'vue-scan'
+import VueScan, { type VueScanOptions } from 'vue-plugin-scan'
 import App from './App.vue'
 
 import './style.css'
