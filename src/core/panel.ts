@@ -50,13 +50,31 @@ class DebugPanel {
       font-size: 12px;
       padding: 12px;
       z-index: 10000;
-      cursor: move;
+      cursor: default;
       max-height: 80vh;
       overflow-y: auto;
     `
     this.panel.innerHTML = `
-      <div style="margin-bottom: 8px; border-bottom: 1px solid rgba(255,255,255,0.2); padding-bottom: 8px;">
+      <div class="panel-header" style="
+        position: relative;
+        margin-bottom: 8px;
+        border-bottom: 1px solid rgba(255,255,255,0.2);
+        padding-bottom: 8px;
+      ">
         <div style="font-weight: bold; margin-bottom: 8px;">Vue Scan Debug Panel</div>
+        <div class="drag-handle" style="
+          position: absolute;
+          top: 0;
+          right: 0;
+          width: 20px;
+          height: 20px;
+          cursor: move;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          opacity: 0.5;
+          transition: opacity 0.2s;
+        ">⋮⋮</div>
         <div style="display: flex; gap: 8px; margin-bottom: 8px;">
           <button id="clear-history" style="padding: 4px 8px; border-radius: 4px; border: none; background: #666;">
             Clear History
@@ -74,15 +92,30 @@ class DebugPanel {
       </div>
       <div id="vue-scan-content"></div>
     `
+
+    // 添加拖拽handle的hover效果
+    const style = document.createElement('style')
+    style.textContent = `
+      .drag-handle:hover {
+        opacity: 1 !important;
+      }
+    `
+    document.head.appendChild(style)
+
     document.body.appendChild(this.panel)
     this.setupEventListeners()
   }
 
   private setupDragging() {
-    this.panel.addEventListener('mousedown', (e) => {
+    const dragHandle = this.panel.querySelector('.drag-handle')
+
+    dragHandle?.addEventListener('mousedown', (e) => {
       this.isDragging = true
-      this.dragStartX = e.clientX - this.panel.offsetLeft
-      this.dragStartY = e.clientY - this.panel.offsetTop
+      this.dragStartX = (e as MouseEvent).clientX - this.panel.offsetLeft
+      this.dragStartY = (e as MouseEvent).clientY - this.panel.offsetTop
+
+      // 防止文本选中
+      e.preventDefault()
     })
 
     document.addEventListener('mousemove', (e) => {
@@ -180,8 +213,8 @@ class DebugPanel {
     // 高亮新选中的项
     this.selectedUuid = uuid
     const data = this.componentData.get(uuid)
-    if (!data) 
-return
+    if (!data)
+      return
 
     const targetElement = document.querySelector(`[data-vue-scan-id="${uuid}"]`)
     if (!targetElement) {
