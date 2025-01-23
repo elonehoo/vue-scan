@@ -171,27 +171,50 @@ class DebugPanel {
     if (!data) 
 return
 
-    const targetElement = document.querySelector(`[data-vue-scan-id="${uuid}"]`)
+    // 使用更可靠的选择器组合
+    const targetElement = document.querySelector(`[data-vue-scan-id="${uuid}"], [data-component-id="${uuid}"]`)
     if (!targetElement) {
       console.warn(`[vue-scan] Cannot find element with id ${uuid}`)
       return
     }
 
-    // 定位到组件
+    // 获取真实的组件元素边界
+    const bounds = targetElement.getBoundingClientRect()
+
+    // 滚动到视图
     targetElement.scrollIntoView({
       behavior: 'smooth',
       block: 'center',
     })
 
-    // 使用面板状态来控制高亮
+    // 高亮显示
     if (this.selectedUuid === uuid) {
+      // 使用canvas高亮和DOM高亮结合
+      highlight(targetElement, uuid, 1, {
+        hideComponentName: false,
+        permanent: true,
+      })
       this.addHighlight(targetElement, uuid)
     }
  else {
+      unhighlight(uuid)
       this.removeHighlight(targetElement, uuid)
     }
 
+    // 更新标签位置
+    this.updateLabels()
     this.render()
+  }
+
+  // 新增：更新所有标签位置
+  private updateLabels() {
+    document.querySelectorAll('[id^="vue-scan-label-"]').forEach((label) => {
+      const uuid = label.id.replace('vue-scan-label-', '')
+      const element = document.querySelector(`[data-vue-scan-id="${uuid}"]`)
+      if (element && label instanceof HTMLElement) {
+        this.updateLabelPosition(element, label)
+      }
+    })
   }
 
   // 新增：添加高亮样式
@@ -212,8 +235,8 @@ return
   private updateHighlightStyle() {
     // 移除旧的样式
     const oldStyle = document.getElementById('vue-scan-highlight-style')
-    if (oldStyle) 
-oldStyle.remove()
+    if (oldStyle)
+      oldStyle.remove()
 
     // 添加新的样式
     const style = document.createElement('style')
@@ -293,6 +316,13 @@ oldStyle.remove()
 
     // 计算平均渲染时间
     componentInfo.averageRenderTime = componentInfo.totalRenderTime / componentInfo.renderCount
+
+    // 如果组件当前被高亮，需要更新高亮状态
+    const element = document.querySelector(`[data-vue-scan-id="${uuid}"]`)
+    if (element?.hasAttribute('data-vue-scan-highlighted')) {
+      this.updateHighlightStyle()
+      this.updateLabels()
+    }
 
     this.render()
   }

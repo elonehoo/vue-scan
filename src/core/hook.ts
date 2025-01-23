@@ -72,9 +72,10 @@ export function createOnBeforeUpdateHook(instance?: BACE_VUE_INSTANCE, options?:
 
   // 给组件DOM添加唯一标识
   if (el && typeof el === 'object') {
-    (el as HTMLElement).setAttribute('data-vue-scan-id', uuid)
-    // 保存组件名称，方便后续使用
-    (el as HTMLElement).setAttribute('data-vue-scan-name', name)
+    const element = el as HTMLElement
+    element.setAttribute('data-vue-scan-id', uuid)
+    element.setAttribute('data-component-id', uuid) // 添加备用ID
+    element.setAttribute('data-vue-scan-name', name)
   }
 
   return () => {
@@ -95,14 +96,19 @@ export function createOnBeforeUpdateHook(instance?: BACE_VUE_INSTANCE, options?:
     Promise.resolve().then(() => {
       const renderTime = performance.now() - (instance.__renderStartTime || 0)
 
-      // 如果元素被高亮，需要保持高亮状态
-      const el = instance?.subTree?.el || instance.$el
-      if (el && typeof el === 'object') {
-        const isHighlighted = (el as HTMLElement).hasAttribute('data-vue-scan-highlighted')
-        if (isHighlighted) {
-          // 确保高亮状态在更新后仍然存在
+      // 获取最新的DOM元素
+      const currentEl = instance?.subTree?.el || instance.$el
+      if (currentEl && typeof currentEl === 'object') {
+        const element = currentEl as HTMLElement
+        // 确保ID始终存在
+        element.setAttribute('data-vue-scan-id', uuid)
+        element.setAttribute('data-component-id', uuid)
+        element.setAttribute('data-vue-scan-name', name)
+
+        // 保持高亮状态
+        if (element.hasAttribute('data-vue-scan-highlighted')) {
           requestAnimationFrame(() => {
-            (el as HTMLElement).setAttribute('data-vue-scan-highlighted', 'true')
+            element.setAttribute('data-vue-scan-highlighted', 'true')
           })
         }
       }
@@ -120,6 +126,7 @@ export function createOnBeforeUpdateHook(instance?: BACE_VUE_INSTANCE, options?:
       })
     })
 
+    // 移除自动取消高亮的timeout
     if (instance.__flashTimeout) {
       clearTimeout(instance.__flashTimeout)
 
