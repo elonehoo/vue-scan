@@ -32,6 +32,7 @@ interface HighlightItem {
   lastUpdateTime: number
   opacity: number
   state: 'fade-in' | 'visible' | 'fade-out'
+  permanent?: boolean // 添加永久高亮标记
 }
 
 class HighlightCanvas {
@@ -65,7 +66,14 @@ class HighlightCanvas {
     this.canvas.height = window.innerHeight
   }
 
-  drawHighlight(bounds: ComponentBoundingRect, uuid: string, name: string, flashCount: number, hideComponentName = false) {
+  drawHighlight(
+    bounds: ComponentBoundingRect,
+    uuid: string,
+    name: string,
+    flashCount: number,
+    hideComponentName = false,
+    permanent = false, // 添加永久高亮选项
+  ) {
     const now = Date.now()
     const existingItem = this.highlights.get(uuid)
 
@@ -75,6 +83,7 @@ class HighlightCanvas {
       existingItem.flashCount = flashCount
       existingItem.hideComponentName = hideComponentName
       existingItem.lastUpdateTime = now
+      existingItem.permanent = permanent // 保存permanent状态
 
       if (existingItem.state === 'fade-out') {
         existingItem.state = 'visible'
@@ -91,6 +100,7 @@ class HighlightCanvas {
         lastUpdateTime: now,
         opacity: 0,
         state: 'fade-in',
+        permanent, // 保存permanent状态
       })
     }
 
@@ -129,7 +139,8 @@ class HighlightCanvas {
           break
 
         case 'visible':
-          if (idleTime >= this.DISPLAY_DURATION) {
+          // 只有非永久高亮的元素才会自动消失
+          if (!item.permanent && idleTime >= this.DISPLAY_DURATION) {
             item.state = 'fade-out'
             item.startTime = now
           }
@@ -279,6 +290,7 @@ export function highlight(
   options?: {
     hideComponentName?: boolean
     renderTime?: number
+    permanent?: boolean // 添加永久高亮选项
   },
 ) {
   const bounds = getComponentBoundingRect(instance)
@@ -292,9 +304,15 @@ export function highlight(
   const renderTimeText = options?.renderTime
     ? ` (${options.renderTime.toFixed(2)}ms)`
     : ''
-  const name = `${getInstanceName(instance)} x ${flashCount}${renderTimeText}`
+  const name = `${getInstanceName(instance)} x ${flashCount} ${renderTimeText}`
 
-  highlightCanvas?.drawHighlight(bounds, uuid, name, flashCount, options?.hideComponentName)
+  if (options?.permanent) {
+    // 永久高亮不会自动消失
+    highlightCanvas?.drawHighlight(bounds, uuid, name, flashCount, options?.hideComponentName, options?.permanent)
+  }
+  else {
+    highlightCanvas?.drawHighlight(bounds, uuid, name, flashCount, options?.hideComponentName)
+  }
 }
 
 export function unhighlight(uuid: string) {

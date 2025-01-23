@@ -2,14 +2,23 @@ import type { VueAppInstance } from '@vue/devtools-kit'
 import type { Plugin } from 'vue'
 import type { VueScanBaseOptions, VueScanOptions } from './types'
 import { createOnBeforeUnmountHook, createOnBeforeUpdateHook } from './core/index'
+import { initDebugPanel } from './core/panel'
 import { isDev } from './shared/utils'
 
 const plugin: Plugin<VueScanOptions> = {
   install: (app, options?: VueScanBaseOptions) => {
-    const { enable = isDev() } = options || {}
+    const {
+      enable = isDev(),
+      enablePanel = true, // 默认启用面板
+    } = options || {}
 
     if (!enable) {
       return
+    }
+
+    // 初始化调试面板
+    if (enablePanel) {
+      initDebugPanel()
     }
 
     app.mixin({

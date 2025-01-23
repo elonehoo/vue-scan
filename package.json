@@ -39,7 +39,7 @@
     "lint": "eslint .",
     "lint:fix": "eslint . --fix",
     "typecheck": "tsc --noEmit",
-    "play": "pnpm -C playground run dev",
+    "play": "pnpm --filter \"playground\"",
     "release": "bumpp package.json --commit --push --tag && pnpm -r publish --access public"
   },
   "peerDependencies": {
