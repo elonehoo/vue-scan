@@ -141,6 +141,7 @@ function getComponentFileName(options: VueAppInstance['type']) {
   const file = options.__file
   if (file)
     return classify(basename(file, '.vue'))
+  return null
 }
 
 export function getInstanceName(instance: VueAppInstance) {
