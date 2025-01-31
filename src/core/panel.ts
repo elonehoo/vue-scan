@@ -1,3 +1,12 @@
+/**
+ * --todo--
+ *
+ * 1. 需要完全使用 Native 的方式编写这些组件吗，我们是可以可以学习 React plugin 的方式使用 TSX 的方式编写，在这里我们就应该使用 SFC 的方式编写组件
+ * 2. 将 所有的 HTML 部分使用 SFC 的方式编写，进行重写。
+ * 3. 将所有的 Native Javascript 的方式进行重写，将部分的逻辑放到 Vue 的组件中进行处理。
+ * ......
+ */
+
 import { clearhighlight, highlight } from './highlight'
 
 interface PropChange {
