@@ -51,17 +51,17 @@
   "devDependencies": {
     "@antfu/eslint-config": "4.3.0",
     "@types/lodash-es": "^4.17.12",
-    "@types/node": "^22.13.4",
-    "@vitest/ui": "^3.0.5",
+    "@types/node": "^22.13.8",
+    "@vitest/ui": "^3.0.7",
     "@vue/devtools-kit": "^7.7.2",
     "@vue/devtools-shared": "^7.7.2",
     "bumpp": "^10.0.3",
-    "eslint": "^9.20.1",
+    "eslint": "^9.21.0",
     "lodash-es": "^4.17.21",
     "statl-del": "^0.0.4",
-    "typescript": "^5.7.3",
-    "unbuild": "^3.3.1",
-    "vite": "^6.1.0",
-    "vitest": "^3.0.5"
+    "typescript": "^5.8.2",
+    "unbuild": "^3.5.0",
+    "vite": "^6.2.0",
+    "vitest": "^3.0.7"
   }
 }
