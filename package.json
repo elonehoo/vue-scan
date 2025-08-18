@@ -54,7 +54,7 @@
     "@types/node": "^22.15.32",
     "@vitest/ui": "^3.2.3",
     "@vue/devtools-kit": "^8.0.0",
-    "@vue/devtools-shared": "^7.7.7",
+    "@vue/devtools-shared": "^8.0.0",
     "bumpp": "^10.1.1",
     "eslint": "^9.29.0",
     "lodash-es": "^4.17.21",

@@ -28,8 +28,8 @@ importers:
         specifier: ^8.0.0
         version: 8.0.0
       '@vue/devtools-shared':
-        specifier: ^7.7.7
-        version: 7.7.7
+        specifier: ^8.0.0
+        version: 8.0.0
       bumpp:
         specifier: ^10.1.1
         version: 10.1.1
@@ -1186,9 +1186,6 @@ packages:
 
   '@vue/devtools-kit@8.0.0':
     resolution: {integrity: sha512-b11OeQODkE0bctdT0RhL684pEV2DPXJ80bjpywVCbFn1PxuL3bmMPDoJKjbMnnoWbrnUYXYzFfmMWBZAMhORkQ==}
-
-  '@vue/devtools-shared@7.7.7':
-    resolution: {integrity: sha512-+udSj47aRl5aKb0memBvcUG9koarqnxNM5yjuREvqwK6T3ap4mn3Zqqc17QrBFTqSMjr3HK1cvStEZpMDpfdyw==}
 
   '@vue/devtools-shared@8.0.0':
     resolution: {integrity: sha512-jrKnbjshQCiOAJanoeJjTU7WaCg0Dz2BUal6SaR6VM/P3hiFdX5Q6Pxl73ZMnrhCxNK9nAg5hvvRGqs+6dtU1g==}
@@ -3921,10 +3918,6 @@ snapshots:
       perfect-debounce: 1.0.0
       speakingurl: 14.0.1
       superjson: 2.2.2
-
-  '@vue/devtools-shared@7.7.7':
-    dependencies:
-      rfdc: 1.4.1
 
   '@vue/devtools-shared@8.0.0':
     dependencies:
