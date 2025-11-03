@@ -19,8 +19,8 @@ importers:
         specifier: ^4.17.12
         version: 4.17.12
       '@types/node':
-        specifier: ^22.15.32
-        version: 22.15.32
+        specifier: ^24.10.0
+        version: 24.10.0
       '@vitest/ui':
         specifier: ^4.0.3
         version: 4.0.3(vitest@4.0.3)
@@ -50,10 +50,10 @@ importers:
         version: 3.5.0(typescript@5.8.3)(vue-tsc@2.2.10(typescript@5.8.3))(vue@3.5.16(typescript@5.8.3))
       vite:
         specifier: ^7.0.5
-        version: 7.0.5(@types/node@22.15.32)(jiti@2.4.2)(yaml@2.8.0)
+        version: 7.0.5(@types/node@24.10.0)(jiti@2.4.2)(yaml@2.8.0)
       vitest:
         specifier: ^4.0.3
-        version: 4.0.3(@types/debug@4.1.12)(@types/node@22.15.32)(@vitest/ui@4.0.3)(jiti@2.4.2)(yaml@2.8.0)
+        version: 4.0.3(@types/debug@4.1.12)(@types/node@24.10.0)(@vitest/ui@4.0.3)(jiti@2.4.2)(yaml@2.8.0)
 
   playground:
     dependencies:
@@ -66,7 +66,7 @@ importers:
     devDependencies:
       '@vitejs/plugin-vue':
         specifier: ^6.0.0
-        version: 6.0.0(vite@7.0.5(@types/node@22.15.32)(jiti@2.4.2)(yaml@2.8.0))(vue@3.5.16(typescript@5.8.3))
+        version: 6.0.0(vite@7.0.5(@types/node@24.10.0)(jiti@2.4.2)(yaml@2.8.0))(vue@3.5.16(typescript@5.8.3))
       '@vue/tsconfig':
         specifier: ^0.7.0
         version: 0.7.0(typescript@5.8.3)(vue@3.5.16(typescript@5.8.3))
@@ -1020,8 +1020,8 @@ packages:
   '@types/ms@2.1.0':
     resolution: {integrity: sha512-GsCCIZDE/p3i96vtEqx+7dBUGXrc7zeSK3wwPHIaRThS+9OhWIXRqzs4d6k1SVU8g91DrNRWxWUGhp5KXQb2VA==}
 
-  '@types/node@22.15.32':
-    resolution: {integrity: sha512-3jigKqgSjsH6gYZv2nEsqdXfZqIFGAV36XYYjf9KGZ3PSG+IhLecqPnI310RvjutyMwifE2hhhNEklOUrvx/wA==}
+  '@types/node@24.10.0':
+    resolution: {integrity: sha512-qzQZRBqkFsYyaSWXuEHc2WR9c0a0CXwiE5FWUvn7ZM+vdy1uZLfCunD38UzhuB7YN/J11ndbDBcTmOdxJo9Q7A==}
 
   '@types/resolve@1.20.2':
     resolution: {integrity: sha512-60BCwRFOZCQhDncwQdxxeOEEkbc5dIMccYLwbxsS4TUNeVECQ/pBJ0j09mrHOl/JJvpRPGwO9SvE4nR2Nb/a4Q==}
@@ -2846,8 +2846,8 @@ packages:
       typescript:
         optional: true
 
-  undici-types@6.21.0:
-    resolution: {integrity: sha512-iwDZqg0QAGrg9Rav5H4n0M64c3mkR59cJ6wQp+7C4nI0gsmExaedaYLNO44eT4AtBBwjbTiGPMlt2Md0T9H9JQ==}
+  undici-types@7.16.0:
+    resolution: {integrity: sha512-Zz+aZWSj8LE6zoxD+xrjh4VfkIG8Ya6LvYkZqtUQGJPZjYl53ypCaUwWqo7eI0x66KBGeRo+mlBEkMSeSZ38Nw==}
 
   unist-util-is@6.0.0:
     resolution: {integrity: sha512-2qCTHimwdxLfz+YzdGfkqNlH0tLi9xjTnHddPmJwtIG9MGsdbutfTc4P+haPD7l7Cjxf/WZj+we5qfVPvvxfYw==}
@@ -3663,9 +3663,9 @@ snapshots:
 
   '@types/ms@2.1.0': {}
 
-  '@types/node@22.15.32':
+  '@types/node@24.10.0':
     dependencies:
-      undici-types: 6.21.0
+      undici-types: 7.16.0
 
   '@types/resolve@1.20.2': {}
 
@@ -3800,10 +3800,10 @@ snapshots:
       '@typescript-eslint/types': 8.33.1
       eslint-visitor-keys: 4.2.0
 
-  '@vitejs/plugin-vue@6.0.0(vite@7.0.5(@types/node@22.15.32)(jiti@2.4.2)(yaml@2.8.0))(vue@3.5.16(typescript@5.8.3))':
+  '@vitejs/plugin-vue@6.0.0(vite@7.0.5(@types/node@24.10.0)(jiti@2.4.2)(yaml@2.8.0))(vue@3.5.16(typescript@5.8.3))':
     dependencies:
       '@rolldown/pluginutils': 1.0.0-beta.19
-      vite: 7.0.5(@types/node@22.15.32)(jiti@2.4.2)(yaml@2.8.0)
+      vite: 7.0.5(@types/node@24.10.0)(jiti@2.4.2)(yaml@2.8.0)
       vue: 3.5.16(typescript@5.8.3)
 
   '@vitest/eslint-plugin@1.2.1(eslint@9.29.0(jiti@2.4.2))(typescript@5.8.3)(vitest@4.0.3)':
@@ -3812,7 +3812,7 @@ snapshots:
       eslint: 9.29.0(jiti@2.4.2)
     optionalDependencies:
       typescript: 5.8.3
-      vitest: 4.0.3(@types/debug@4.1.12)(@types/node@22.15.32)(@vitest/ui@4.0.3)(jiti@2.4.2)(yaml@2.8.0)
+      vitest: 4.0.3(@types/debug@4.1.12)(@types/node@24.10.0)(@vitest/ui@4.0.3)(jiti@2.4.2)(yaml@2.8.0)
     transitivePeerDependencies:
       - supports-color
 
@@ -3825,13 +3825,13 @@ snapshots:
       chai: 6.2.0
       tinyrainbow: 3.0.3
 
-  '@vitest/mocker@4.0.3(vite@7.0.5(@types/node@22.15.32)(jiti@2.4.2)(yaml@2.8.0))':
+  '@vitest/mocker@4.0.3(vite@7.0.5(@types/node@24.10.0)(jiti@2.4.2)(yaml@2.8.0))':
     dependencies:
       '@vitest/spy': 4.0.3
       estree-walker: 3.0.3
       magic-string: 0.30.21
     optionalDependencies:
-      vite: 7.0.5(@types/node@22.15.32)(jiti@2.4.2)(yaml@2.8.0)
+      vite: 7.0.5(@types/node@24.10.0)(jiti@2.4.2)(yaml@2.8.0)
 
   '@vitest/pretty-format@4.0.3':
     dependencies:
@@ -3859,7 +3859,7 @@ snapshots:
       sirv: 3.0.2
       tinyglobby: 0.2.15
       tinyrainbow: 3.0.3
-      vitest: 4.0.3(@types/debug@4.1.12)(@types/node@22.15.32)(@vitest/ui@4.0.3)(jiti@2.4.2)(yaml@2.8.0)
+      vitest: 4.0.3(@types/debug@4.1.12)(@types/node@24.10.0)(@vitest/ui@4.0.3)(jiti@2.4.2)(yaml@2.8.0)
 
   '@vitest/utils@4.0.3':
     dependencies:
@@ -5888,7 +5888,7 @@ snapshots:
       - vue
       - vue-tsc
 
-  undici-types@6.21.0: {}
+  undici-types@7.16.0: {}
 
   unist-util-is@6.0.0:
     dependencies:
@@ -5931,7 +5931,7 @@ snapshots:
 
   util-deprecate@1.0.2: {}
 
-  vite@7.0.5(@types/node@22.15.32)(jiti@2.4.2)(yaml@2.8.0):
+  vite@7.0.5(@types/node@24.10.0)(jiti@2.4.2)(yaml@2.8.0):
     dependencies:
       esbuild: 0.25.5
       fdir: 6.4.6(picomatch@4.0.2)
@@ -5940,15 +5940,15 @@ snapshots:
       rollup: 4.42.0
       tinyglobby: 0.2.14
     optionalDependencies:
-      '@types/node': 22.15.32
+      '@types/node': 24.10.0
       fsevents: 2.3.3
       jiti: 2.4.2
       yaml: 2.8.0
 
-  vitest@4.0.3(@types/debug@4.1.12)(@types/node@22.15.32)(@vitest/ui@4.0.3)(jiti@2.4.2)(yaml@2.8.0):
+  vitest@4.0.3(@types/debug@4.1.12)(@types/node@24.10.0)(@vitest/ui@4.0.3)(jiti@2.4.2)(yaml@2.8.0):
     dependencies:
       '@vitest/expect': 4.0.3
-      '@vitest/mocker': 4.0.3(vite@7.0.5(@types/node@22.15.32)(jiti@2.4.2)(yaml@2.8.0))
+      '@vitest/mocker': 4.0.3(vite@7.0.5(@types/node@24.10.0)(jiti@2.4.2)(yaml@2.8.0))
       '@vitest/pretty-format': 4.0.3
       '@vitest/runner': 4.0.3
       '@vitest/snapshot': 4.0.3
@@ -5965,11 +5965,11 @@ snapshots:
       tinyexec: 0.3.2
       tinyglobby: 0.2.15
       tinyrainbow: 3.0.3
-      vite: 7.0.5(@types/node@22.15.32)(jiti@2.4.2)(yaml@2.8.0)
+      vite: 7.0.5(@types/node@24.10.0)(jiti@2.4.2)(yaml@2.8.0)
       why-is-node-running: 2.3.0
     optionalDependencies:
       '@types/debug': 4.1.12
-      '@types/node': 22.15.32
+      '@types/node': 24.10.0
       '@vitest/ui': 4.0.3(vitest@4.0.3)
     transitivePeerDependencies:
       - jiti
