@@ -1,2 +1,5 @@
+export * from './canvas-renderer'
+export * from './fps'
 export * from './highlight'
 export * from './hook'
+export * from './performance'

@@ -17,7 +17,7 @@
   ],
   "exports": {
     ".": {
-      "types": "./dist/index.d.ts",
+      "types": "./dist/index.d.mts",
       "import": "./dist/index.mjs",
       "require": "./dist/index.cjs"
     },
@@ -25,14 +25,14 @@
   },
   "main": "dist/index.cjs",
   "module": "dist/index.mjs",
-  "types": "dist/index.d.ts",
+  "types": "dist/index.d.mts",
   "files": [
     "*.d.ts",
     "dist"
   ],
   "scripts": {
-    "dev": "unbuild --stub",
-    "build": "unbuild",
+    "dev": "tsdown --watch",
+    "build": "tsdown",
     "stale": "stale-del -u",
     "test": "vitest",
     "ui": "vitest --ui",
@@ -59,8 +59,9 @@
     "eslint": "^9.29.0",
     "lodash-es": "^4.17.21",
     "statl-del": "^0.0.4",
+    "tsdown": "^0.17.2",
     "typescript": "^5.8.3",
-    "unbuild": "^3.5.0",
+    "unplugin-vue": "^7.1.0",
     "vite": "^7.0.5",
     "vitest": "^4.0.3"
   }

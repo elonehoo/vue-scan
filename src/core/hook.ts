@@ -1,7 +1,8 @@
 import type { VueAppInstance } from '@vue/devtools-kit'
-import { getInstanceName } from '../shared/vue'
+import { updateComponentRenderData } from '../shared/store'
+import { getComponentBoundingRect, getInstanceName } from '../shared/vue'
+import { getCanvasRenderer } from './canvas-renderer'
 import { clearhighlight, createUpdateHighlight, highlight } from './highlight'
-import { updatePanelData } from './panel'
 
 export interface BACE_VUE_INSTANCE extends VueAppInstance {
   __vue_scan_injected__?: boolean
@@ -19,26 +20,13 @@ export interface BACE_VUE_INSTANCE extends VueAppInstance {
   __renderStartTime?: number
 }
 
-function setupPropsWatch(instance: BACE_VUE_INSTANCE, uuid: string) {
+function setupPropsWatch(instance: BACE_VUE_INSTANCE, _uuid: string) {
   const props = instance.props || {}
 
-  // 使用Proxy监听props的变化
+  // 使用Proxy监听props的变化（仅用于触发高亮，不再记录历史）
   return new Proxy(props, {
     set(target: any, key: string, value: any) {
-      const oldValue = target[key]
       target[key] = value
-
-      if (oldValue !== value) {
-        updatePanelData(uuid, {
-          propsHistory: [{
-            key: String(key),
-            oldValue,
-            newValue: value,
-            timestamp: Date.now(),
-          }],
-        })
-      }
-
       return true
     },
   })
@@ -118,11 +106,27 @@ export function createOnBeforeUpdateHook(instance?: BACE_VUE_INSTANCE, options?:
         renderTime, // 传递渲染时间到highlight函数
       })
 
-      // 更新面板数据
-      updatePanelData(uuid, {
+      // 使用 Canvas 渲染器进行高亮
+      const canvasRenderer = getCanvasRenderer()
+      if (canvasRenderer && currentEl) {
+        const bounds = getComponentBoundingRect(instance)
+        if (bounds.width > 0 && bounds.height > 0) {
+          canvasRenderer.highlight(uuid, {
+            x: bounds.left,
+            y: bounds.top,
+            width: bounds.width,
+            height: bounds.height,
+            name,
+            renderCount: instance.__flashCount || 0,
+            renderTime,
+          })
+        }
+      }
+
+      // 更新组件渲染数据（供 widget 显示）
+      updateComponentRenderData(uuid, {
         componentName: name,
         renderTime,
-        lastRenderTime: renderTime,
       })
     })
 
