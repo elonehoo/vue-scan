@@ -64,9 +64,9 @@ function drawChart() {
   ctx.stroke()
   ctx.setLineDash([])
 
-  // 绘制 FPS 曲线
+  // 绘制 FPS 曲线 - 使用紫色主题
   ctx.beginPath()
-  ctx.strokeStyle = '#42b883'
+  ctx.strokeStyle = '#8e61e3'
   ctx.lineWidth = 2
   ctx.lineJoin = 'round'
   ctx.lineCap = 'round'
@@ -83,10 +83,10 @@ function drawChart() {
   })
   ctx.stroke()
 
-  // 绘制渐变填充
+  // 绘制渐变填充 - 使用紫色主题
   const gradient = ctx.createLinearGradient(0, 0, 0, height)
-  gradient.addColorStop(0, 'rgba(66, 184, 131, 0.25)')
-  gradient.addColorStop(1, 'rgba(66, 184, 131, 0)')
+  gradient.addColorStop(0, 'rgba(142, 97, 227, 0.3)')
+  gradient.addColorStop(1, 'rgba(142, 97, 227, 0)')
 
   ctx.beginPath()
   history.forEach((fps, index) => {

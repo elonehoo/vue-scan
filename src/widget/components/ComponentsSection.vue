@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import type { ComponentRenderData } from '../../shared/store'
 import type { Ref } from 'vue'
+import type { ComponentRenderData } from '../../shared/store'
 import { computed, inject, ref } from 'vue'
 
 // 从 widget 状态获取组件数据
@@ -16,8 +16,8 @@ const expandedItems = ref<Set<string>>(new Set())
 
 const components = computed(() => {
   // 触发响应式更新
-  // eslint-disable-next-line no-unused-expressions
-  widgetState?.updateCounter.value
+  const counter = widgetState?.updateCounter.value
+  void counter
 
   const data = widgetState?.componentDataMap.value ?? new Map()
   const entries = Array.from(data.entries())

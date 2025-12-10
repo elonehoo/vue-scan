@@ -1,8 +1,8 @@
 <script setup lang="ts">
 import { ref } from 'vue'
-import TodoList from './components/TodoList.vue'
-import TodoItem from './components/TodoItem.vue'
 import Counter from './components/Counter.vue'
+import TodoItem from './components/TodoItem.vue'
+import TodoList from './components/TodoList.vue'
 
 interface Todo {
   id: number

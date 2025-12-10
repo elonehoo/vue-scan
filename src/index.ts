@@ -3,6 +3,8 @@ import type { Plugin } from 'vue'
 import type { VueScanBaseOptions, VueScanOptions } from './types'
 import { destroyCanvasRenderer, initCanvasRenderer } from './core/canvas-renderer'
 import { createOnBeforeUnmountHook, createOnBeforeUpdateHook } from './core/index'
+import { createInstrumentation, setOnLongRenderCallback } from './core/instrumentation'
+import { recordLongRender } from './core/notifications/event-tracking'
 import { isDev } from './shared/utils'
 import { createWidget, destroyWidget } from './widget'
 
@@ -22,6 +24,19 @@ const plugin: Plugin<VueScanOptions> = {
 
     // 初始化 Canvas 渲染器（用于丝滑高亮效果）
     initCanvasRenderer()
+
+    // 初始化 Instrumentation 系统（类似 bippy）
+    createInstrumentation('vue-scan-main', {
+      trackChanges: true,
+      onRender: (_fiber, _renders) => {
+        // 渲染回调由 instrumentation 内部处理
+      },
+    })
+
+    // 设置长渲染回调
+    setOnLongRenderCallback((name, time) => {
+      recordLongRender(name, time)
+    })
 
     // 初始化统一的 Widget 面板
     if (enablePanel) {
@@ -77,8 +92,11 @@ const plugin: Plugin<VueScanOptions> = {
 
 export default plugin
 
+export * from './api'
 export * from './core/canvas-renderer'
+export * from './core/config'
 export * from './core/fps'
+export * from './core/instrumentation'
 export * from './core/performance'
 export * from './types'
 export * from './widget'

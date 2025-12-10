@@ -19,27 +19,27 @@ const memoryStatus = computed(() => {
 
 const memoryBarColor = computed(() => {
   switch (memoryStatus.value) {
-    case 'bad': return '#ff6b6b'
-    case 'warning': return '#ffd93d'
-    default: return '#42b883'
+    case 'bad': return '#ef4444'
+    case 'warning': return '#f59e0b'
+    default: return '#8e61e3'
   }
 })
 
 function getVitalColor(type: string, value: number | null): string {
   if (value === null)
-    return 'rgba(255, 255, 255, 0.4)'
+    return '#666'
 
   switch (type) {
     case 'fcp':
-      return value < 1800 ? '#42b883' : value < 3000 ? '#ffd93d' : '#ff6b6b'
+      return value < 1800 ? '#22c55e' : value < 3000 ? '#f59e0b' : '#ef4444'
     case 'lcp':
-      return value < 2500 ? '#42b883' : value < 4000 ? '#ffd93d' : '#ff6b6b'
+      return value < 2500 ? '#22c55e' : value < 4000 ? '#f59e0b' : '#ef4444'
     case 'fid':
-      return value < 100 ? '#42b883' : value < 300 ? '#ffd93d' : '#ff6b6b'
+      return value < 100 ? '#22c55e' : value < 300 ? '#f59e0b' : '#ef4444'
     case 'cls':
-      return value < 0.1 ? '#42b883' : value < 0.25 ? '#ffd93d' : '#ff6b6b'
+      return value < 0.1 ? '#22c55e' : value < 0.25 ? '#f59e0b' : '#ef4444'
     default:
-      return 'rgba(255, 255, 255, 0.6)'
+      return '#888'
   }
 }
 
@@ -52,10 +52,10 @@ function formatValue(value: number | null, unit: string, decimals = 0): string {
 const domNodeColor = computed(() => {
   const nodes = props.performanceData?.domNodes ?? 0
   if (nodes > 1500)
-    return '#ff6b6b'
+    return '#ef4444'
   if (nodes > 800)
-    return '#ffd93d'
-  return '#42b883'
+    return '#f59e0b'
+  return '#22c55e'
 })
 </script>
 

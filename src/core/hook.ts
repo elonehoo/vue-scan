@@ -1,8 +1,10 @@
 import type { VueAppInstance } from '@vue/devtools-kit'
+import type { VueFiber } from './instrumentation/types'
 import { updateComponentRenderData } from '../shared/store'
 import { getComponentBoundingRect, getInstanceName } from '../shared/vue'
 import { getCanvasRenderer } from './canvas-renderer'
 import { clearhighlight, createUpdateHighlight, highlight } from './highlight'
+import { handleComponentRender } from './instrumentation'
 
 export interface BACE_VUE_INSTANCE extends VueAppInstance {
   __vue_scan_injected__?: boolean
@@ -83,6 +85,9 @@ export function createOnBeforeUpdateHook(instance?: BACE_VUE_INSTANCE, options?:
     // 在下一个微任务中计算渲染耗时
     Promise.resolve().then(() => {
       const renderTime = performance.now() - (instance.__renderStartTime || 0)
+
+      // 触发 instrumentation 回调
+      handleComponentRender(instance as unknown as VueFiber, 'update', renderTime)
 
       // 获取最新的DOM元素
       const currentEl = instance?.subTree?.el || instance.$el

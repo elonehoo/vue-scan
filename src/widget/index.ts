@@ -69,65 +69,78 @@ export function destroyWidget() {
 
 function getWidgetStyles(): string {
   return `
+    /* React-Scan Style Theme - Purple & Dark */
+    :host {
+      all: initial;
+      font-family: Menlo, Consolas, Monaco, 'Liberation Mono', 'Lucida Console', monospace;
+      font-size: 13px;
+      line-height: 1.5;
+      color: #fff;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+    }
+
     * {
       margin: 0;
       padding: 0;
       box-sizing: border-box;
+      outline: none !important;
     }
 
-    :host {
-      all: initial;
-      font-family: 'SF Mono', Monaco, 'Andale Mono', 'Ubuntu Mono', monospace;
-      font-size: 12px;
-      line-height: 1.4;
-      color: #fff;
+    *::-webkit-scrollbar {
+      width: 6px;
+      height: 6px;
+    }
+
+    *::-webkit-scrollbar-track {
+      background: transparent;
+    }
+
+    *::-webkit-scrollbar-thumb {
+      background: rgba(255, 255, 255, 0.3);
+      border-radius: 3px;
+    }
+
+    *::-webkit-scrollbar-thumb:hover {
+      background: rgba(255, 255, 255, 0.4);
     }
 
     .vue-scan-widget {
       position: fixed;
       z-index: 2147483647;
-      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
       user-select: none;
       -webkit-user-select: none;
+      touch-action: none;
     }
 
-    .vue-scan-widget * {
-      box-sizing: border-box;
-    }
-
-    /* Widget 主容器 */
+    /* Main Widget Container - React-Scan Style */
     .widget-container {
-      background: rgba(10, 10, 10, 0.95);
-      border: 1px solid rgba(255, 255, 255, 0.1);
-      border-radius: 12px;
-      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
-      backdrop-filter: blur(12px);
+      background: #000;
+      border-radius: 8px;
+      box-shadow: 0 4px 24px rgba(0, 0, 0, 0.5);
       overflow: hidden;
       display: flex;
       flex-direction: column;
-      min-width: 280px;
-      max-width: 400px;
-      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      min-width: 320px;
+      max-width: 550px;
+      animation: fadeIn 0.3s ease;
     }
 
-    .widget-container.collapsed {
-      min-width: auto;
-      max-width: auto;
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(4px); }
+      to { opacity: 1; transform: translateY(0); }
     }
 
-    /* 拖拽手柄区域 */
+    /* Drag Handle / Header - React-Scan Style */
     .drag-handle {
       cursor: move;
-      padding: 10px 12px;
+      padding: 0 12px;
+      min-height: 36px;
       display: flex;
       align-items: center;
       justify-content: space-between;
-      background: rgba(66, 184, 131, 0.1);
-      border-bottom: 1px solid rgba(66, 184, 131, 0.2);
-    }
-
-    .drag-handle:hover {
-      background: rgba(66, 184, 131, 0.15);
+      background: #000;
+      border-bottom: 1px solid #222;
     }
 
     .logo-section {
@@ -140,20 +153,14 @@ function getWidgetStyles(): string {
       width: 8px;
       height: 8px;
       border-radius: 50%;
-      background: #42b883;
-      box-shadow: 0 0 8px #42b883;
-      animation: pulse 2s ease-in-out infinite;
-    }
-
-    @keyframes pulse {
-      0%, 100% { opacity: 1; }
-      50% { opacity: 0.6; }
+      background: #8e61e3;
+      box-shadow: 0 0 8px rgba(142, 97, 227, 0.5);
     }
 
     .logo-text {
-      font-weight: 600;
+      font-weight: 500;
       font-size: 13px;
-      color: #42b883;
+      color: #fff;
     }
 
     .header-controls {
@@ -167,41 +174,43 @@ function getWidgetStyles(): string {
       display: flex;
       align-items: center;
       justify-content: center;
-      background: transparent;
+      background: rgba(255, 255, 255, 0.1);
       border: none;
-      color: rgba(255, 255, 255, 0.5);
+      color: rgba(255, 255, 255, 0.6);
       cursor: pointer;
       border-radius: 4px;
-      transition: all 0.2s;
+      transition: all 0.15s;
     }
 
     .header-btn:hover {
-      background: rgba(255, 255, 255, 0.1);
-      color: rgba(255, 255, 255, 0.8);
+      background: rgba(255, 255, 255, 0.15);
+      color: #fff;
     }
 
-    /* Toolbar */
+    /* Toolbar - React-Scan Style */
     .toolbar {
       display: flex;
       align-items: center;
-      padding: 8px 12px;
-      gap: 8px;
-      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-      background: rgba(0, 0, 0, 0.3);
+      min-height: 36px;
+      max-height: 36px;
+      padding: 0 8px;
+      gap: 4px;
+      border-bottom: 1px solid #222;
+      background: #0a0a0a;
     }
 
     .toolbar-btn {
       display: flex;
       align-items: center;
       justify-content: center;
-      width: 32px;
-      height: 32px;
+      height: 28px;
+      padding: 0 8px;
       background: transparent;
-      border: 1px solid rgba(255, 255, 255, 0.1);
-      border-radius: 6px;
-      color: rgba(255, 255, 255, 0.6);
+      border: none;
+      border-radius: 4px;
+      color: #999;
       cursor: pointer;
-      transition: all 0.2s;
+      transition: all 0.15s;
     }
 
     .toolbar-btn:hover {
@@ -210,30 +219,29 @@ function getWidgetStyles(): string {
     }
 
     .toolbar-btn.active {
-      background: rgba(66, 184, 131, 0.2);
-      border-color: #42b883;
-      color: #42b883;
+      color: #8e61e3;
+    }
+
+    .toolbar-btn.active:hover {
+      background: rgba(142, 97, 227, 0.1);
     }
 
     .toolbar-divider {
       width: 1px;
-      height: 20px;
-      background: rgba(255, 255, 255, 0.1);
+      height: 16px;
+      background: #333;
+      margin: 0 4px;
     }
 
-    /* Toggle 开关 */
+    /* Toggle Switch - React-Scan Style */
     .toggle-switch {
       position: relative;
-      width: 36px;
-      height: 20px;
+      width: 32px;
+      height: 18px;
       background: rgba(255, 255, 255, 0.1);
-      border-radius: 10px;
+      border-radius: 9px;
       cursor: pointer;
-      transition: background 0.2s;
-    }
-
-    .toggle-switch.active {
-      background: rgba(66, 184, 131, 0.4);
+      transition: all 0.2s;
     }
 
     .toggle-switch::after {
@@ -241,23 +249,62 @@ function getWidgetStyles(): string {
       position: absolute;
       top: 2px;
       left: 2px;
-      width: 16px;
-      height: 16px;
-      background: #fff;
+      width: 14px;
+      height: 14px;
+      background: #666;
+      border: 2px solid #444;
       border-radius: 50%;
-      transition: transform 0.2s;
+      transition: all 0.2s;
+    }
+
+    .toggle-switch.active {
+      background: rgba(142, 97, 227, 0.4);
     }
 
     .toggle-switch.active::after {
-      transform: translateX(16px);
-      background: #42b883;
+      transform: translateX(14px);
+      background: #fff;
+      border-color: #8e61e3;
     }
 
-    /* 内容区域 */
+    /* Tabs - React-Scan Style */
+    .tabs {
+      display: flex;
+      background: #0a0a0a;
+      border-bottom: 1px solid #222;
+    }
+
+    .tab {
+      flex: 1;
+      padding: 8px 12px;
+      background: transparent;
+      border: none;
+      border-bottom: 2px solid transparent;
+      color: #666;
+      font-size: 11px;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.15s;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .tab:hover {
+      color: #888;
+      background: rgba(255, 255, 255, 0.02);
+    }
+
+    .tab.active {
+      color: #8e61e3;
+      border-bottom-color: #8e61e3;
+    }
+
+    /* Content Area - React-Scan Style */
     .content-area {
       flex: 1;
       overflow: hidden;
-      max-height: 400px;
+      max-height: 350px;
+      background: #0a0a0a;
     }
 
     .content-scroll {
@@ -266,52 +313,23 @@ function getWidgetStyles(): string {
       overflow-x: hidden;
     }
 
-    .content-scroll::-webkit-scrollbar {
-      width: 4px;
-    }
-
-    .content-scroll::-webkit-scrollbar-track {
-      background: transparent;
-    }
-
-    .content-scroll::-webkit-scrollbar-thumb {
-      background: rgba(255, 255, 255, 0.2);
-      border-radius: 2px;
-    }
-
-    /* 面板标签页 */
-    .tabs {
+    /* Section Header - React-Scan Style */
+    .section-header {
+      position: sticky;
+      top: 0;
+      z-index: 10;
       display: flex;
-      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-      background: rgba(0, 0, 0, 0.2);
-    }
-
-    .tab {
-      flex: 1;
-      padding: 8px 12px;
-      background: transparent;
-      border: none;
-      color: rgba(255, 255, 255, 0.5);
+      align-items: center;
+      gap: 8px;
+      padding: 0 12px;
+      height: 28px;
+      background: #0a0a0a;
+      border-bottom: 1px solid #222;
+      color: #888;
       font-size: 11px;
-      font-weight: 500;
-      cursor: pointer;
-      transition: all 0.2s;
-      text-transform: uppercase;
-      letter-spacing: 0.5px;
     }
 
-    .tab:hover {
-      background: rgba(255, 255, 255, 0.05);
-      color: rgba(255, 255, 255, 0.8);
-    }
-
-    .tab.active {
-      color: #42b883;
-      background: rgba(66, 184, 131, 0.1);
-      border-bottom: 2px solid #42b883;
-    }
-
-    /* FPS 区域 */
+    /* FPS Section - React-Scan Style */
     .fps-section {
       padding: 12px;
     }
@@ -324,42 +342,41 @@ function getWidgetStyles(): string {
     }
 
     .fps-label {
-      color: rgba(255, 255, 255, 0.5);
-      font-size: 11px;
+      color: #666;
+      font-size: 10px;
       text-transform: uppercase;
       letter-spacing: 0.5px;
     }
 
     .fps-value {
-      font-size: 28px;
-      font-weight: 700;
+      font-size: 24px;
+      font-weight: 600;
       font-variant-numeric: tabular-nums;
-      transition: color 0.3s;
+      transition: color 0.2s;
     }
 
-    .fps-value.good { color: #42b883; }
-    .fps-value.warning { color: #ffd93d; }
-    .fps-value.bad { color: #ff6b6b; }
+    .fps-value.good { color: #22c55e; }
+    .fps-value.warning { color: #f59e0b; }
+    .fps-value.bad { color: #ef4444; }
 
     .fps-stats {
       display: flex;
       gap: 16px;
       font-size: 10px;
-      color: rgba(255, 255, 255, 0.4);
+      color: #666;
     }
 
     .fps-chart {
-      height: 48px;
+      height: 40px;
       margin-top: 8px;
-      background: rgba(0, 0, 0, 0.3);
-      border-radius: 6px;
+      background: rgba(255, 255, 255, 0.03);
+      border-radius: 4px;
       overflow: hidden;
     }
 
-    /* 性能指标 */
+    /* Metrics Section - React-Scan Style */
     .metrics-section {
       padding: 12px;
-      border-top: 1px solid rgba(255, 255, 255, 0.05);
     }
 
     .metrics-grid {
@@ -372,28 +389,34 @@ function getWidgetStyles(): string {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      padding: 6px 8px;
+      padding: 8px 10px;
       background: rgba(255, 255, 255, 0.03);
       border-radius: 4px;
+      border: 1px solid transparent;
+      transition: all 0.15s;
+    }
+
+    .metric-item:hover {
+      border-color: #333;
     }
 
     .metric-label {
       font-size: 10px;
-      color: rgba(255, 255, 255, 0.4);
+      color: #666;
       text-transform: uppercase;
     }
 
     .metric-value {
-      font-size: 11px;
-      font-weight: 600;
+      font-size: 12px;
+      font-weight: 500;
       font-variant-numeric: tabular-nums;
     }
 
-    .metric-value.good { color: #42b883; }
-    .metric-value.warning { color: #ffd93d; }
-    .metric-value.bad { color: #ff6b6b; }
+    .metric-value.good { color: #22c55e; }
+    .metric-value.warning { color: #f59e0b; }
+    .metric-value.bad { color: #ef4444; }
 
-    /* 内存进度条 */
+    /* Memory Bar - React-Scan Style */
     .memory-bar {
       margin-top: 8px;
     }
@@ -403,43 +426,77 @@ function getWidgetStyles(): string {
       justify-content: space-between;
       margin-bottom: 4px;
       font-size: 10px;
-      color: rgba(255, 255, 255, 0.4);
+      color: #666;
     }
 
     .memory-bar-track {
-      height: 4px;
-      background: rgba(255, 255, 255, 0.1);
-      border-radius: 2px;
+      height: 6px;
+      background: rgba(255, 255, 255, 0.05);
+      border-radius: 3px;
       overflow: hidden;
     }
 
     .memory-bar-fill {
       height: 100%;
-      border-radius: 2px;
-      transition: width 0.3s, background 0.3s;
+      border-radius: 3px;
+      background: linear-gradient(90deg, #8e61e3 0%, #a855f7 100%);
+      transition: width 0.3s;
     }
 
-    /* 组件列表 */
+    /* Components Section - React-Scan Style */
     .components-section {
       padding: 8px;
     }
 
+    .search-container {
+      padding: 0 4px 8px;
+    }
+
+    .search-input {
+      width: 100%;
+      padding: 8px 12px;
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid #333;
+      border-radius: 6px;
+      color: #fff;
+      font-size: 12px;
+      font-family: inherit;
+      transition: all 0.15s;
+    }
+
+    .search-input::placeholder {
+      color: #555;
+      font-style: italic;
+    }
+
+    .search-input:focus {
+      border-color: #8e61e3;
+      background: rgba(142, 97, 227, 0.05);
+    }
+
+    .component-list {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+
     .component-item {
       padding: 8px 10px;
-      margin-bottom: 4px;
-      background: rgba(255, 255, 255, 0.03);
+      background: rgba(255, 255, 255, 0.02);
+      border: 1px solid transparent;
       border-radius: 6px;
       cursor: pointer;
-      transition: all 0.2s;
+      transition: all 0.15s;
     }
 
     .component-item:hover {
-      background: rgba(255, 255, 255, 0.08);
+      background: rgba(255, 255, 255, 0.05);
+      border-color: #333;
     }
 
     .component-item.selected {
-      background: rgba(66, 184, 131, 0.15);
-      border: 1px solid rgba(66, 184, 131, 0.3);
+      background: rgba(142, 97, 227, 0.1);
+      border-color: rgba(142, 97, 227, 0.3);
     }
 
     .component-header {
@@ -449,7 +506,7 @@ function getWidgetStyles(): string {
     }
 
     .component-name {
-      font-weight: 600;
+      font-weight: 500;
       font-size: 12px;
       color: #fff;
     }
@@ -457,133 +514,516 @@ function getWidgetStyles(): string {
     .component-count {
       display: inline-flex;
       align-items: center;
-      justify-content: center;
-      min-width: 20px;
-      height: 18px;
-      padding: 0 6px;
-      background: rgba(66, 184, 131, 0.2);
-      border-radius: 9px;
+      gap: 4px;
+      padding: 2px 8px;
+      background: rgba(168, 85, 247, 0.1);
+      border-radius: 4px;
       font-size: 10px;
-      font-weight: 600;
-      color: #42b883;
+      font-weight: 500;
+      color: #a855f7;
+    }
+
+    .count-badge {
+      display: flex;
+      gap: 4px;
+      align-items: center;
+      padding: 2px 6px;
+      font-size: 11px;
+      font-weight: 500;
+      color: #a855f7;
+      background: rgba(168, 85, 247, 0.1);
+      border-radius: 4px;
     }
 
     .component-details {
-      margin-top: 6px;
-      padding-top: 6px;
-      border-top: 1px solid rgba(255, 255, 255, 0.05);
-      font-size: 10px;
-      color: rgba(255, 255, 255, 0.5);
+      margin-top: 8px;
+      padding-top: 8px;
+      border-top: 1px solid #222;
+      font-size: 11px;
+      color: #666;
     }
 
     .component-detail-row {
       display: flex;
       justify-content: space-between;
-      margin-bottom: 2px;
+      margin-bottom: 4px;
     }
 
-    /* 折叠状态 */
+    .component-detail-row .label {
+      color: #555;
+    }
+
+    .component-detail-row .value {
+      color: #888;
+    }
+
+    /* Collapsed Bar - React-Scan Style */
     .collapsed-bar {
       display: flex;
       align-items: center;
-      padding: 8px 12px;
-      background: rgba(10, 10, 10, 0.95);
-      border-radius: 20px;
-      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.3);
+      padding: 8px 16px;
+      background: #000;
+      border-radius: 8px;
+      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.4);
       cursor: pointer;
       transition: all 0.2s;
     }
 
     .collapsed-bar:hover {
-      background: rgba(20, 20, 20, 0.95);
+      background: #0a0a0a;
     }
 
     .collapsed-fps {
-      font-size: 14px;
-      font-weight: 700;
+      font-size: 13px;
+      font-weight: 600;
       margin-left: 8px;
+      font-variant-numeric: tabular-nums;
     }
 
-    /* 调整大小手柄 */
-    .resize-handle {
-      position: absolute;
-      background: transparent;
+    .collapsed-fps.good { color: #22c55e; }
+    .collapsed-fps.warning { color: #f59e0b; }
+    .collapsed-fps.bad { color: #ef4444; }
+
+    /* Inspector Section - React-Scan Style */
+    .inspector-section {
+      padding: 12px;
     }
 
-    .resize-handle-corner {
-      width: 12px;
-      height: 12px;
-    }
-
-    .resize-handle-edge {
-      width: 100%;
-      height: 4px;
-    }
-
-    /* 空状态 */
-    .empty-state {
+    .inspector-hint {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
       padding: 24px;
+      color: #666;
       text-align: center;
-      color: rgba(255, 255, 255, 0.4);
+    }
+
+    .inspector-hint-icon {
+      font-size: 32px;
+      margin-bottom: 12px;
+      opacity: 0.5;
+    }
+
+    .inspector-hint-text {
+      font-size: 12px;
+      line-height: 1.6;
+    }
+
+    .inspector-component {
+      padding: 12px;
+      background: rgba(255, 255, 255, 0.02);
+      border: 1px solid #333;
+      border-radius: 6px;
+    }
+
+    .inspector-component-name {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 14px;
+      font-weight: 600;
+      color: #fff;
+      margin-bottom: 12px;
+    }
+
+    .inspector-component-tag {
+      padding: 2px 6px;
+      background: rgba(142, 97, 227, 0.2);
+      border-radius: 4px;
+      font-size: 10px;
+      font-weight: 500;
+      color: #8e61e3;
+    }
+
+    .inspector-props {
+      margin-top: 12px;
+    }
+
+    .inspector-props-title {
+      font-size: 10px;
+      text-transform: uppercase;
+      color: #666;
+      margin-bottom: 8px;
+    }
+
+    .inspector-prop {
+      display: flex;
+      justify-content: space-between;
+      padding: 4px 0;
+      font-size: 11px;
+      border-bottom: 1px solid #222;
+    }
+
+    .inspector-prop:last-child {
+      border-bottom: none;
+    }
+
+    .inspector-prop-name {
+      color: #a855f7;
+    }
+
+    .inspector-prop-value {
+      color: #888;
+      max-width: 200px;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    /* Empty State - React-Scan Style */
+    .empty-state {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 32px;
+      color: #555;
+      text-align: center;
     }
 
     .empty-state-icon {
-      font-size: 32px;
-      margin-bottom: 8px;
+      font-size: 24px;
+      margin-bottom: 12px;
+      opacity: 0.5;
     }
 
     .empty-state-text {
       font-size: 12px;
+      color: #666;
     }
 
-    /* 动画 */
-    @keyframes flash {
-      0% { background: rgba(66, 184, 131, 0.3); }
-      100% { background: transparent; }
+    /* Flash Animation - React-Scan Style */
+    @keyframes countFlash {
+      0% { transform: scale(1); }
+      50% { transform: scale(1.1); background: rgba(168, 85, 247, 0.2); }
+      100% { transform: scale(1); }
     }
 
-    .flash {
-      animation: flash 0.5s ease-out;
+    .count-flash {
+      animation: countFlash 0.3s ease;
     }
 
-    /* 搜索框 */
-    .search-input {
-      width: 100%;
-      padding: 8px 12px;
-      background: rgba(255, 255, 255, 0.05);
-      border: 1px solid rgba(255, 255, 255, 0.1);
-      border-radius: 6px;
-      color: #fff;
-      font-size: 12px;
-      outline: none;
-      transition: all 0.2s;
-    }
-
-    .search-input::placeholder {
-      color: rgba(255, 255, 255, 0.3);
-    }
-
-    .search-input:focus {
-      border-color: #42b883;
-      background: rgba(66, 184, 131, 0.05);
-    }
-
-    /* 通知徽章 */
+    /* Notification Badge - React-Scan Style */
     .notification-badge {
       position: absolute;
-      top: -4px;
-      right: -4px;
-      min-width: 14px;
-      height: 14px;
-      padding: 0 4px;
-      background: #ff6b6b;
-      border-radius: 7px;
-      font-size: 9px;
+      top: -2px;
+      right: -2px;
+      min-width: 12px;
+      height: 12px;
+      padding: 0 3px;
+      background: #ef4444;
+      border-radius: 6px;
+      font-size: 8px;
       font-weight: 700;
       color: #fff;
       display: flex;
       align-items: center;
       justify-content: center;
+    }
+
+    /* Severity Colors */
+    .severity-low { color: #22c55e; background: rgba(34, 197, 94, 0.1); }
+    .severity-medium { color: #f59e0b; background: rgba(245, 158, 11, 0.1); }
+    .severity-high { color: #ef4444; background: rgba(239, 68, 68, 0.1); }
+
+    /* Property View - React-Scan Style */
+    .property-view {
+      font-size: 11px;
+    }
+
+    .property-row {
+      display: flex;
+      padding: 4px 8px;
+      margin-left: 12px;
+      border-left: 1px solid #333;
+    }
+
+    .property-key {
+      color: #a855f7;
+      margin-right: 8px;
+    }
+
+    .property-value {
+      color: #888;
+    }
+
+    .property-value.string { color: #22c55e; }
+    .property-value.number { color: #60a5fa; }
+    .property-value.boolean { color: #f59e0b; }
+    .property-value.null { color: #666; font-style: italic; }
+
+    /* Button Styles */
+    button {
+      font-family: inherit;
+      cursor: pointer;
+    }
+
+    /* Tab with Notification Badge - React-Scan Style */
+    .notification-tab {
+      position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 4px;
+    }
+
+    .notification-icon {
+      font-size: 12px;
+    }
+
+    .notification-tab .notification-badge {
+      position: relative;
+      top: 0;
+      right: 0;
+      min-width: 16px;
+      height: 14px;
+      padding: 0 4px;
+      font-size: 9px;
+    }
+
+    /* Notification Section - React-Scan Style */
+    .notification-section {
+      padding: 0;
+    }
+
+    .notification-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 8px 12px;
+      background: #0a0a0a;
+      border-bottom: 1px solid #222;
+    }
+
+    .notification-title {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 11px;
+      color: #fff;
+      font-weight: 500;
+    }
+
+    .notification-title .badge {
+      min-width: 16px;
+      height: 14px;
+      padding: 0 4px;
+      border-radius: 7px;
+      font-size: 9px;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .badge-high {
+      background: #ef4444;
+      color: #fff;
+    }
+
+    .badge-warning {
+      background: #f59e0b;
+      color: #000;
+    }
+
+    .clear-btn {
+      background: transparent;
+      border: 1px solid #333;
+      border-radius: 4px;
+      color: #888;
+      font-size: 10px;
+      padding: 4px 8px;
+      cursor: pointer;
+      transition: all 0.15s;
+    }
+
+    .clear-btn:hover {
+      background: rgba(255, 255, 255, 0.1);
+      color: #fff;
+      border-color: #444;
+    }
+
+    .event-list {
+      max-height: 280px;
+      overflow-y: auto;
+    }
+
+    .event-item {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 12px;
+      border-bottom: 1px solid #1a1a1a;
+      cursor: pointer;
+      transition: background 0.15s;
+    }
+
+    .event-item:hover {
+      background: #111;
+    }
+
+    .event-item.selected {
+      background: #18181b;
+    }
+
+    .event-icon {
+      font-size: 14px;
+      flex-shrink: 0;
+    }
+
+    .event-info {
+      flex: 1;
+      min-width: 0;
+    }
+
+    .event-name {
+      font-size: 11px;
+      color: #fff;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .event-meta {
+      font-size: 9px;
+      color: #666;
+      margin-top: 2px;
+    }
+
+    .event-badge {
+      padding: 2px 6px;
+      border-radius: 4px;
+      font-size: 10px;
+      font-weight: 600;
+      color: #fff;
+      flex-shrink: 0;
+    }
+
+    .empty-state {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 40px 20px;
+      text-align: center;
+    }
+
+    .empty-icon {
+      font-size: 32px;
+      margin-bottom: 12px;
+      opacity: 0.5;
+    }
+
+    .empty-text {
+      font-size: 13px;
+      color: #888;
+      margin-bottom: 8px;
+    }
+
+    .empty-hint {
+      font-size: 11px;
+      color: #555;
+    }
+
+    /* Event Detail - React-Scan Style */
+    .event-detail {
+      background: #0a0a0a;
+      border-top: 1px solid #222;
+      padding: 12px;
+    }
+
+    .detail-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 12px;
+    }
+
+    .detail-kind {
+      font-size: 10px;
+      color: #666;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .detail-severity {
+      font-size: 10px;
+      font-weight: 600;
+    }
+
+    .detail-content {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .detail-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 11px;
+    }
+
+    .detail-label {
+      color: #666;
+    }
+
+    .detail-value {
+      color: #fff;
+      font-family: 'Menlo', 'Consolas', monospace;
+    }
+
+    .detail-subtitle {
+      font-size: 10px;
+      color: #888;
+      margin-top: 8px;
+      margin-bottom: 4px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .detail-renders {
+      margin-top: 8px;
+    }
+
+    .render-item {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 4px 8px;
+      background: #111;
+      border-radius: 4px;
+      margin-bottom: 4px;
+      font-size: 11px;
+    }
+
+    .render-name {
+      flex: 1;
+      color: #8e61e3;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .render-count {
+      color: #666;
+      font-size: 10px;
+    }
+
+    .render-time {
+      color: #f59e0b;
+      font-family: 'Menlo', 'Consolas', monospace;
+    }
+
+    /* Animations */
+    @keyframes pulse {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.5; }
+    }
+
+    .pulse {
+      animation: pulse 2s ease-in-out infinite;
     }
   `
 }

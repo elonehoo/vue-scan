@@ -1,15 +1,20 @@
 <script setup lang="ts">
-import type { ComponentRenderData } from '../shared/store'
 import type { FPSData } from '../core/fps'
 import type { PerformanceMetrics } from '../core/performance'
+import type { ComponentRenderData } from '../shared/store'
 import type { WidgetOptions } from './index'
 import { computed, onMounted, onUnmounted, provide, reactive, ref } from 'vue'
 import { destroyFPSMonitor, initFPSMonitor } from '../core/fps'
+import { startTimingTracking } from '../core/notifications/event-tracking'
+import { updateFPSAlert, updateMemoryAlert } from '../core/notifications/thresholds'
 import { destroyPerformanceMonitor, initPerformanceMonitor } from '../core/performance'
 import { addUpdateListener, getAllComponentData, getRecentComponents } from '../shared/store'
 import ComponentsSection from './components/ComponentsSection.vue'
 import FPSSection from './components/FPSSection.vue'
+import InspectorSection from './components/InspectorSection.vue'
 import MetricsSection from './components/MetricsSection.vue'
+import NotificationsPanel from './components/NotificationsPanel.vue'
+import SettingsSection from './components/SettingsSection.vue'
 import TabsSection from './components/TabsSection.vue'
 import ToolbarSection from './components/ToolbarSection.vue'
 
@@ -20,8 +25,11 @@ const props = defineProps<{
 // Widget 状态
 const isCollapsed = ref(false)
 const isDragging = ref(false)
-const currentTab = ref<'stats' | 'components'>('stats')
+const currentTab = ref<'stats' | 'components' | 'inspector' | 'notifications' | 'settings'>('stats')
 const isEnabled = ref(true)
+
+// 性能追踪取消器
+let stopTimingTracking: (() => void) | null = null
 
 // 位置和尺寸
 const position = reactive({
@@ -92,6 +100,9 @@ onMounted(() => {
     updateCounter.value++
   })
 
+  // 启动性能追踪（交互、掉帧、长渲染）
+  stopTimingTracking = startTimingTracking()
+
   // 启动 FPS 监控
   if (props.options.enableFPS !== false) {
     const fpsMonitor = initFPSMonitor({
@@ -102,6 +113,8 @@ onMounted(() => {
         if (fpsHistory.value.length > 60) {
           fpsHistory.value.shift()
         }
+        // 更新 FPS 告警状态
+        updateFPSAlert(data.current)
       },
     })
     fpsMonitor.start()
@@ -112,6 +125,10 @@ onMounted(() => {
     const perfMonitor = initPerformanceMonitor({
       onUpdate: (metrics) => {
         performanceData.value = metrics
+        // 更新内存告警状态
+        if (metrics.memory) {
+          updateMemoryAlert(metrics.memory.usagePercentage)
+        }
       },
     })
     perfMonitor.start()
@@ -127,6 +144,7 @@ onUnmounted(() => {
   destroyFPSMonitor()
   destroyPerformanceMonitor()
   removeStoreListener?.()
+  stopTimingTracking?.()
   document.removeEventListener('mousemove', handleMouseMove)
   document.removeEventListener('mouseup', handleMouseUp)
   window.removeEventListener('resize', handleWindowResize)
@@ -237,6 +255,21 @@ const fpsStatusClass = computed(() => {
           <!-- Components 面板 -->
           <template v-else-if="currentTab === 'components'">
             <ComponentsSection />
+          </template>
+
+          <!-- Inspector 面板 -->
+          <template v-else-if="currentTab === 'inspector'">
+            <InspectorSection />
+          </template>
+
+          <!-- Notifications 面板 -->
+          <template v-else-if="currentTab === 'notifications'">
+            <NotificationsPanel />
+          </template>
+
+          <!-- Settings 面板 -->
+          <template v-else-if="currentTab === 'settings'">
+            <SettingsSection />
           </template>
         </div>
       </div>
