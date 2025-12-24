@@ -37,24 +37,24 @@
     "vue": ">=3.0.0"
   },
   "dependencies": {
-    "vue": "^3.5.16"
+    "vue": "^3.5.26"
   },
   "devDependencies": {
-    "@antfu/eslint-config": "4.14.1",
+    "@antfu/eslint-config": "4.19.0",
     "@types/lodash-es": "^4.17.12",
-    "@types/node": "^24.10.0",
-    "@vitejs/plugin-vue": "^6.0.0",
-    "@vitest/ui": "^4.0.3",
-    "@vue/devtools-kit": "^8.0.0",
-    "@vue/devtools-shared": "^8.0.0",
-    "bumpp": "^10.1.1",
-    "eslint": "^9.29.0",
-    "lodash-es": "^4.17.21",
+    "@types/node": "^24.10.4",
+    "@vitejs/plugin-vue": "^6.0.3",
+    "@vitest/ui": "^4.0.16",
+    "@vue/devtools-kit": "^8.0.5",
+    "@vue/devtools-shared": "^8.0.5",
+    "bumpp": "^10.3.2",
+    "eslint": "^9.39.2",
+    "lodash-es": "^4.17.22",
     "statl-del": "^0.0.4",
-    "tsdown": "^0.17.2",
-    "typescript": "^5.8.3",
+    "tsdown": "^0.18.3",
+    "typescript": "^5.9.3",
     "unplugin-vue": "^7.1.0",
-    "vite": "^7.0.5",
-    "vitest": "^4.0.3"
+    "vite": "^7.3.0",
+    "vitest": "^4.0.16"
   }
 }
