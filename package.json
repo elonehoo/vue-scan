@@ -52,7 +52,7 @@
     "lodash-es": "^4.17.21",
     "statl-del": "^0.0.4",
     "tsdown": "^0.17.2",
-    "typescript": "^6.0.2",
+    "typescript": "^7.0.2",
     "unplugin-vue": "^7.1.0",
     "vite": "^8.0.5",
     "vitest": "^4.0.3"
