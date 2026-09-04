@@ -48,7 +48,7 @@
     "@vue/devtools-kit": "^8.0.0",
     "@vue/devtools-shared": "^8.0.0",
     "bumpp": "^11.0.1",
-    "eslint": "^9.29.0",
+    "eslint": "^10.10.0",
     "lodash-es": "^4.17.21",
     "statl-del": "^0.0.4",
     "tsdown": "^0.17.2",
