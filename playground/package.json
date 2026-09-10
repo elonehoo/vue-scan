@@ -9,13 +9,13 @@
     "preview": "vite preview"
   },
   "dependencies": {
-    "vue": "^3.5.16",
+    "vue": "^3.5.42",
     "vue-plugin-scan": "workspace:*"
   },
   "devDependencies": {
-    "@vitejs/plugin-vue": "^6.0.0",
-    "@vue/tsconfig": "^0.7.0",
-    "typescript": "~6.0.2",
-    "vue-tsc": "^3.0.3"
+    "@vitejs/plugin-vue": "^6.0.8",
+    "@vue/tsconfig": "^0.9.1",
+    "typescript": "~6.0.3",
+    "vue-tsc": "^3.3.11"
   }
 }
