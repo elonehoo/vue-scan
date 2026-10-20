@@ -32,14 +32,14 @@ jobs:
       - name: Lint
         run: pnpm run lint
 
+      - name: Build
+        run: pnpm run build
+
       - name: Typecheck
         run: pnpm run typecheck
 
       - name: Test
         run: pnpm run test --run
-
-      - name: Build
-        run: pnpm run build
 
       - name: Check packed consumer
         run: pnpm run test:package
