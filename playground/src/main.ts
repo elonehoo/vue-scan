@@ -1,5 +1,6 @@
+import type { VueScanOptions } from 'vue-plugin-scan'
 import { createApp } from 'vue'
-import VueScan, { type VueScanOptions } from 'vue-plugin-scan'
+import VueScan from 'vue-plugin-scan'
 import App from './App.vue'
 
 import './style.css'

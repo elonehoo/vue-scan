@@ -9,8 +9,10 @@ export default defineConfig([
     dts: {
       vue: true,
     },
-    external: ['vue'],
-    noExternal: ['lodash-es'],
+    deps: {
+      neverBundle: ['vue'],
+      alwaysBundle: ['lodash-es'],
+    },
   },
   // Auto 模式的 IIFE 构建（用于 script 标签）
   {
@@ -21,8 +23,10 @@ export default defineConfig([
     globalName: 'VueScan',
     outDir: 'dist',
     dts: false,
-    external: [],
-    noExternal: ['vue', 'lodash-es'],
+    deps: {
+      neverBundle: [],
+      alwaysBundle: ['vue', 'lodash-es'],
+    },
     minify: true,
     sourcemap: false,
     define: {

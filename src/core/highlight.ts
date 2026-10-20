@@ -79,7 +79,7 @@ type UpdateHighlightFunction = (
   bounds: ComponentBoundingRect,
   name: string,
   flashCount: number,
-  hideComponentName?: boolean
+  hideComponentName?: boolean,
 ) => void
 
 export function createUpdateHighlight(): UpdateHighlightFunction {

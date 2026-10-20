@@ -9,13 +9,14 @@
     "preview": "vite preview"
   },
   "dependencies": {
-    "vue": "^3.5.16",
+    "vue": "^3.5.44",
     "vue-plugin-scan": "workspace:*"
   },
   "devDependencies": {
-    "@vitejs/plugin-vue": "^6.0.0",
-    "@vue/tsconfig": "^0.7.0",
-    "typescript": "~6.0.2",
-    "vue-tsc": "^3.0.3"
+    "@typescript/native": "npm:typescript@~7.0.2",
+    "@vitejs/plugin-vue": "^6.0.10",
+    "@vue/tsconfig": "^0.9.1",
+    "typescript": "npm:@typescript/typescript6@~6.0.2",
+    "vue-tsc": "^3.3.13"
   }
 }

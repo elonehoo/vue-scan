@@ -4,7 +4,7 @@ like [react-scan](https://github.com/aidenybai/react-scan)
 
 > Scan your Vue app for renders
 
-![](./public/demo.gif)
+![Vue Scan demo](./public/demo.gif)
 
 ## Features
 
@@ -24,8 +24,9 @@ npm install vue-plugin-scan
 ## Usage
 
 ```ts
+import type { VueScanOptions } from 'vue-plugin-scan'
 import { createApp } from 'vue'
-import VueScan, { type VueScanOptions } from 'vue-plugin-scan'
+import VueScan from 'vue-plugin-scan'
 import App from './App.vue'
 
 import './style.css'
