@@ -23,5 +23,7 @@ const invalid = `<template>
 `
 const validResult = await eslint.lintText(valid, { filePath })
 const invalidResult = await eslint.lintText(invalid, { filePath })
+assert.equal(validResult[0].fatalErrorCount, 0)
+assert.equal(invalidResult[0].fatalErrorCount, 0)
 assert.equal(validResult[0].messages.filter(message => message.ruleId === rule).length, 0)
 assert.equal(invalidResult[0].messages.filter(message => message.ruleId === rule).length, 1)
