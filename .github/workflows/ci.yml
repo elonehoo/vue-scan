@@ -32,6 +32,9 @@ jobs:
       - name: Lint
         run: pnpm run lint
 
+      - name: Check lint rule compatibility
+        run: pnpm run test:lint
+
       - name: Build
         run: pnpm run build
 
