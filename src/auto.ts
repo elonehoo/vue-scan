@@ -16,6 +16,7 @@ import { initCanvasRenderer } from './core/canvas-renderer'
 import { loadConfig, updateConfig } from './core/config'
 import { createInstrumentation, setOnLongRenderCallback } from './core/instrumentation'
 import { recordLongRender } from './core/notifications'
+import { getScriptOptions } from './core/script-options'
 import plugin from './index'
 import { createWidget } from './widget'
 
@@ -44,7 +45,7 @@ export interface VueScanGlobal {
 
 declare global {
   interface Window {
-    __VUE_SCAN__: VueScanGlobal
+    __VUE_SCAN__?: VueScanGlobal
     vueScan: (options?: Partial<VueScanBaseOptions>) => void
   }
 }
@@ -54,46 +55,6 @@ const VERSION = '0.0.1'
 
 // ============ 自动初始化选项 ============
 let autoInitOptions: Partial<VueScanBaseOptions> = {}
-
-// 从 script 标签读取选项
-function getScriptOptions(): Partial<VueScanBaseOptions> {
-  if (typeof document === 'undefined')
-    return {}
-
-  const scripts = document.querySelectorAll('script')
-  for (const script of scripts) {
-    const src = script.src || ''
-    if (src.includes('vue-scan') || src.includes('auto.global')) {
-      // 解析 data-* 属性
-      const options: Partial<VueScanBaseOptions> = {}
-
-      if (script.dataset.enabled !== undefined) {
-        options.enable = script.dataset.enabled !== 'false'
-      }
-      if (script.dataset.panel !== undefined) {
-        options.enablePanel = script.dataset.panel !== 'false'
-      }
-      if (script.dataset.fps !== undefined) {
-        options.enableFPS = script.dataset.fps !== 'false'
-      }
-      if (script.dataset.performance !== undefined) {
-        options.enablePerformance = script.dataset.performance !== 'false'
-      }
-      if (script.dataset.fpsThreshold) {
-        options.fpsWarningThreshold = Number.parseInt(script.dataset.fpsThreshold, 10)
-      }
-      if (script.dataset.renderThreshold) {
-        options.renderTimeThreshold = Number.parseInt(script.dataset.renderThreshold, 10)
-      }
-      if (script.dataset.position) {
-        options.initialPosition = script.dataset.position as 'top-left' | 'top-right' | 'bottom-left' | 'bottom-right'
-      }
-
-      return options
-    }
-  }
-  return {}
-}
 
 ;(() => {
   // eslint-disable-next-line node/prefer-global/process
@@ -136,7 +97,7 @@ function getScriptOptions(): Partial<VueScanBaseOptions> {
   // 暴露简洁的 vueScan 函数（类似 react-scan 的 scan 函数）
   window.vueScan = (options?: Partial<VueScanBaseOptions>) => {
     if (options) {
-      window.__VUE_SCAN__.configure(options)
+      window.__VUE_SCAN__?.configure(options)
     }
     initVueScan()
   }
@@ -145,7 +106,8 @@ function getScriptOptions(): Partial<VueScanBaseOptions> {
 // ============ 初始化 Vue Scan ============
 
 function initVueScan() {
-  if (window.__VUE_SCAN__.initialized)
+  const scan = window.__VUE_SCAN__
+  if (!scan || scan.initialized)
     return
 
   const options = autoInitOptions
@@ -175,20 +137,24 @@ function initVueScan() {
   // 初始化 Widget 面板
   if (options.enablePanel !== false) {
     createWidget({
-      initialPosition: options.initialPosition || 'bottom-right',
+      initialPosition: options.panelPosition || 'bottom-right',
       enableFPS: options.enableFPS !== false,
       enablePerformance: options.enablePerformance !== false,
       fpsWarningThreshold: options.fpsWarningThreshold || 30,
     })
   }
 
-  window.__VUE_SCAN__.initialized = true
+  scan.initialized = true
   // eslint-disable-next-line no-console
   console.log(`[vue-scan] v${VERSION} initialized`)
 }
 
 // Check if the __vue_app__ property exists on the #app node of the page
 function injectVueScan(node: HTMLElement) {
+  const scan = window.__VUE_SCAN__
+  if (!scan)
+    return
+
   // @ts-expect-error vue internal
   if ((node.__vue_app__ || node.__vue__)) {
     // @ts-expect-error vue internal
@@ -198,7 +164,7 @@ function injectVueScan(node: HTMLElement) {
     initVueScan()
 
     // @ts-expect-error vue internal
-    node.__vue_app__.use(window.__VUE_SCAN__.plugin, autoInitOptions)
+    node.__vue_app__.use(scan.plugin, autoInitOptions)
 
     const first = !vueInstance?.__vue_scan_injected__
 
