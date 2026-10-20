@@ -41,5 +41,8 @@ jobs:
       - name: Build
         run: pnpm run build
 
+      - name: Check packed consumer
+        run: pnpm run test:package
+
       - name: Build playground
         run: pnpm -C playground run build
