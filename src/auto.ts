@@ -8,10 +8,11 @@
  */
 
 import type { VNodeNormalizedChildren } from 'vue'
+import type { BACE_VUE_INSTANCE } from './core'
 import type { VueScanBaseOptions } from './types'
 import { throttle } from 'lodash-es'
 import { getAPI } from './api'
-import { type BACE_VUE_INSTANCE, createOnBeforeUnmountHook, createOnBeforeUpdateHook } from './core'
+import { createOnBeforeUnmountHook, createOnBeforeUpdateHook } from './core'
 import { initCanvasRenderer } from './core/canvas-renderer'
 import { loadConfig, updateConfig } from './core/config'
 import { createInstrumentation, setOnLongRenderCallback } from './core/instrumentation'

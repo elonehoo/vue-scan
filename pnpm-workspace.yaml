@@ -1,5 +1,10 @@
+ignoreWorkspaceRootCheck: true
+minimumReleaseAgeExcludePrune: true
+trustPolicy: no-downgrade
+shellEmulator: true
+
 packages:
   - playground
 
-onlyBuiltDependencies:
-  - esbuild
+allowBuilds:
+  esbuild: true

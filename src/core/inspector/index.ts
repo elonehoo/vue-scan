@@ -2,13 +2,13 @@
  * Inspector 模块 - 主入口
  */
 
+import { destroyInspectorOverlay, getInspectorOverlay, initInspectorOverlay } from './overlay'
+import { inspectorStore } from './state'
+
 export * from './overlay'
 export * from './state'
 export * from './types'
 export * from './utils'
-
-import { destroyInspectorOverlay, getInspectorOverlay, initInspectorOverlay } from './overlay'
-import { inspectorStore } from './state'
 
 /**
  * 启动 Inspector 模式
