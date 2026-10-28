@@ -32,7 +32,9 @@
     "lint:fix": "eslint . --fix",
     "typecheck": "tsc --noEmit",
     "play": "pnpm --filter playground dev",
-    "release": "bumpp package.json --commit --push --tag && pnpm -r publish --access public"
+    "release": "bumpp package.json --commit --push --tag && pnpm -r publish --access public",
+    "test:package": "node scripts/check-package.mjs",
+    "test:lint": "node scripts/check-lint.mjs"
   },
   "peerDependencies": {
     "vue": ">=3.0.0"

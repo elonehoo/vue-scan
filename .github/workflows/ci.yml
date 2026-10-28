@@ -25,7 +25,25 @@ jobs:
         uses: pnpm/action-setup@v6.1.0
 
       - name: Install
-        run: pnpm install
+        run: pnpm install --frozen-lockfile
 
       - name: Lint
         run: pnpm run lint
+
+      - name: Check lint rule compatibility
+        run: pnpm run test:lint
+
+      - name: Build
+        run: pnpm run build
+
+      - name: Typecheck
+        run: pnpm run typecheck
+
+      - name: Test
+        run: pnpm run test --run
+
+      - name: Check packed consumer
+        run: pnpm run test:package
+
+      - name: Build playground
+        run: pnpm -C playground run build
