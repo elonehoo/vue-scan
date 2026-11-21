@@ -8,6 +8,7 @@ export default defineConfig([
     fromVite: true,
     dts: {
       vue: true,
+      resolve: ['@vue/devtools-kit'],
     },
     deps: {
       neverBundle: ['vue'],
